@@ -1,0 +1,2 @@
+# GramatykiGrafoweAGH
+Projekt2
