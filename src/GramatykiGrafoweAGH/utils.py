@@ -1,5 +1,4 @@
 from collections import defaultdict, Iterable
-from itertools import groupby
 from typing import List, Tuple
 
 import networkx as nx
@@ -72,7 +71,7 @@ def apply_production_while_possible(G: nx.Graph, production: Production) -> nx.G
 
 
 def get_nodes_by_position_dict(G: nx.Graph) -> defaultdict:
-    d =  defaultdict(list)
+    d = defaultdict(list)
     for node in G.nodes:
         d[node.level, node.x, node.y].append(node)
     return d
