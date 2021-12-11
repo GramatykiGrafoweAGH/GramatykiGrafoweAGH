@@ -1,10 +1,10 @@
 from collections import Iterable
-from typing import List
+from typing import List, Tuple
 
 import networkx as nx
 
 from GramatykiGrafoweAGH import Node, Production
-from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError
+from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError, SquareNotFoundError
 
 
 def find_nodes_with_label(G: nx.Graph, label: str) -> List[Node]:
@@ -37,6 +37,22 @@ def merge_two_nodes(G: nx.Graph, old1: Node, old2: Node) -> Node:
     G.add_node(new)
     G.add_edges_from((n, new) for n in neighbors)
     return new
+
+
+def get_square_vertices(G: nx.Graph, I: Node) -> Tuple[Node, Node, Node, Node]:
+    Es = {node for node in G.neighbors(I) if node.label == 'E'}
+    if len(Es) != 4:
+        raise SquareNotFoundError()
+
+    E1 = min(Es, key=lambda node: (node.x, node.y))
+    Es.remove(E1)
+    E2 = next(node for node in Es if node in G.neighbors(E1) and node.x >= E1.x)
+    Es.remove(E2)
+    E4 = next(node for node in Es if node in G.neighbors(E2))
+    Es.remove(E4)
+    E3, = Es
+
+    return E1, E2, E3, E4
 
 
 def apply_productions(G: nx.Graph, productions: Iterable[Production]) -> nx.Graph:
