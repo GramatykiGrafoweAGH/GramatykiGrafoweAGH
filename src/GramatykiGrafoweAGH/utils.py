@@ -1,4 +1,5 @@
-from collections import Iterable
+from collections import defaultdict, Iterable
+from itertools import groupby
 from typing import List, Tuple
 
 import networkx as nx
@@ -68,3 +69,15 @@ def apply_production_while_possible(G: nx.Graph, production: Production) -> nx.G
             G = production(G)
         except CannotApplyProductionError:
             return G
+
+
+def get_nodes_by_position_dict(G: nx.Graph) -> defaultdict:
+    d =  defaultdict(list)
+    for node in G.nodes:
+        d[node.level, node.x, node.y].append(node)
+    return d
+
+
+def check_duplicated_nodes(G: nx.Graph):
+    count = sum(1 for nodes in get_nodes_by_position_dict(G).values() if len(nodes) >= 2)
+    print(f'{count if count != 0 else "No"} duplicated nodes')
