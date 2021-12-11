@@ -67,5 +67,5 @@ def draw_graph(G: nx.Graph, *, level: Optional[int] = None) -> plt.Figure:
 
 
 def show_graph(G: nx.Graph, **kwargs):
-    fig = draw_graph(G, **kwargs)
+    draw_graph(G, **kwargs)
     plt.show()
