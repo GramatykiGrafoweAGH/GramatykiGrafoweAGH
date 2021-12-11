@@ -15,14 +15,14 @@ class Node:
     id: int = field(default_factory=count().__next__, init=False)
 
 
-def production(func):
+Production = Callable[[nx.Graph], nx.Graph]
+
+
+def production(func: Callable[[nx.Graph], None]) -> Production:
     @wraps(func)
-    def wrapper(G: nx.Graph):
+    def wrapper(G: nx.Graph) -> nx.Graph:
         G = G.copy()
         func(G)
         return G
 
     return wrapper
-
-
-Production = Callable[[nx.Graph], nx.Graph]

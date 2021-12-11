@@ -13,7 +13,7 @@ def make_initial_graph() -> nx.Graph:
 
 
 @production
-def P1(G: nx.Graph):
+def P1(G: nx.Graph) -> None:
     try:
         E = find_node_with_label(G, 'E')
     except NodeNotFoundError:
