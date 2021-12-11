@@ -1,4 +1,8 @@
-from GramatykiGrafoweAGH import hello_world
+from GramatykiGrafoweAGH.project import make_initial_graph, P1
+from GramatykiGrafoweAGH.utils import apply_productions
+from GramatykiGrafoweAGH.visualization import show_graph
 
 if __name__ == '__main__':
-    print(hello_world())
+    G = make_initial_graph()
+    G = apply_productions(G, [P1, P1, P1])
+    show_graph(G)

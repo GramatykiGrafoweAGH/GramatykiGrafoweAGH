@@ -3,6 +3,8 @@ from typing import Dict, List, Optional, Tuple
 import matplotlib.pyplot as plt
 import networkx as nx
 
+from GramatykiGrafoweAGH import Node
+
 node_colors = {
     0: {
         'E': '#fe0000',
@@ -26,28 +28,25 @@ node_colors = {
 }
 
 
-def get_node_color(label: str, level: int) -> str:
-    return node_colors.get(min(level, 3), {}).get(label, 'violet')
+def get_node_color(node: Node) -> str:
+    return node_colors.get(min(node.level, 3), {}).get(node.label, 'violet')
 
 
 def get_node_colors(G: nx.Graph) -> List[str]:
-    return [
-        get_node_color(label=data['label'], level=data['level'])
-        for _, data in G.nodes(data=True)
-    ]
+    return [get_node_color(node) for node in G.nodes]
 
 
 def get_node_labels(G: nx.Graph) -> Dict[int, str]:
     return {
-        node: data['label']
-        for node, data in G.nodes(data=True)
+        node: node.label
+        for node in G.nodes
     }
 
 
 def calculate_layout(G: nx.Graph) -> Dict[int, Tuple[float, float]]:
     return {
-        node: (data['x'], data['y'] - data['level'] * 1.5)
-        for node, data in G.nodes(data=True)
+        node: (node.x, node.y - node.level * 1.5)
+        for node in G.nodes
     }
 
 
@@ -57,7 +56,7 @@ def draw_graph(G: nx.Graph, *, level: Optional[int] = None) -> plt.Figure:
     ax.set(xlabel='$x$', ylabel='$y$')
 
     if level is not None:
-        G = G.subgraph([node for node, data in G.nodes(data=True) if data['level'] == level])
+        G = G.subgraph([node for node in G.nodes if node.level == level])
 
     pos = calculate_layout(G)
     node_color = get_node_colors(G)
@@ -65,3 +64,8 @@ def draw_graph(G: nx.Graph, *, level: Optional[int] = None) -> plt.Figure:
     nx.draw(G, ax=ax, pos=pos, node_color=node_color, labels=labels)
 
     return fig
+
+
+def show_graph(G: nx.Graph, **kwargs):
+    fig = draw_graph(G, **kwargs)
+    plt.show()
