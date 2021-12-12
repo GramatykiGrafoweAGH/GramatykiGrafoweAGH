@@ -46,7 +46,7 @@ def get_square_vertices(G: nx.Graph, I: Node) -> Tuple[Node, Node, Node, Node]:
 
     E1 = min(Es, key=lambda node: (node.x, node.y))
     Es.remove(E1)
-    E2 = next(node for node in Es if node in G.neighbors(E1) and node.x >= E1.x)
+    E2 = next(node for node in Es if node in G.neighbors(E1) and node.x > E1.x)
     Es.remove(E2)
     E4 = next(node for node in Es if node in G.neighbors(E2))
     Es.remove(E4)
