@@ -8,4 +8,3 @@ def test_P9():
     G = nx.Graph()
     with pytest.raises(NotImplementedError):
         P9(G)
-
