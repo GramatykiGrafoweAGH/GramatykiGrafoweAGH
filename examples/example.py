@@ -1,4 +1,4 @@
-from GramatykiGrafoweAGH.project import make_initial_graph, P1, P2
+from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1, P2
 from GramatykiGrafoweAGH.utils import apply_productions, check_duplicated_nodes
 from GramatykiGrafoweAGH.visualization import show_graph
 
