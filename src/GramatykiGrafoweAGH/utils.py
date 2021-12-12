@@ -77,7 +77,10 @@ def get_nodes_by_position_dict(G: nx.Graph) -> defaultdict:
     return d
 
 
-def check_duplicated_nodes(G: nx.Graph):
-    count = sum(1 for nodes in get_nodes_by_position_dict(
-        G).values() if len(nodes) >= 2)
-    print(f'{count if count != 0 else "No"} duplicated nodes')
+def count_duplicated_nodes(G: nx.Graph) -> int:
+    return sum(1 for nodes in get_nodes_by_position_dict(G).values() if len(nodes) >= 2)
+
+
+def assert_no_duplicated_nodes(G: nx.Graph) -> bool:
+    count = count_duplicated_nodes(G)
+    assert not count, f'There are {count} duplicated nodes'
