@@ -1,5 +1,5 @@
-from collections import defaultdict, Iterable
-from typing import List, Tuple
+from collections import defaultdict
+from typing import List, Iterable, Tuple
 
 import networkx as nx
 
@@ -78,5 +78,6 @@ def get_nodes_by_position_dict(G: nx.Graph) -> defaultdict:
 
 
 def check_duplicated_nodes(G: nx.Graph):
-    count = sum(1 for nodes in get_nodes_by_position_dict(G).values() if len(nodes) >= 2)
+    count = sum(1 for nodes in get_nodes_by_position_dict(
+        G).values() if len(nodes) >= 2)
     print(f'{count if count != 0 else "No"} duplicated nodes')

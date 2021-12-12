@@ -1,7 +1,7 @@
-from collections import Callable
 from dataclasses import dataclass, field
 from functools import wraps
 from itertools import count
+from typing import Callable
 
 import networkx as nx
 
