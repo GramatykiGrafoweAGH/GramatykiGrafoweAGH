@@ -99,6 +99,6 @@ def apply_productions(G: nx.Graph, productions: Iterable[Callable[[nx.Graph], No
 def apply_production_while_possible(G: nx.Graph, production: Callable[[nx.Graph], Node]) -> nx.Graph:
     while True:
         try:
-            G = production(G)
+            production(G)
         except CannotApplyProductionError:
             return G
