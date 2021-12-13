@@ -1,6 +1,6 @@
 import networkx as nx
 
-from GramatykiGrafoweAGH import Node, production
+from GramatykiGrafoweAGH import Node
 from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError, SquareNotFoundError
 from GramatykiGrafoweAGH.utils import get_first_node_with_label, get_square_vertices, replace_node
 
@@ -12,7 +12,6 @@ def make_initial_graph() -> nx.Graph:
     return G
 
 
-@production
 def P1(G: nx.Graph) -> None:
     try:
         E = get_first_node_with_label(G, 'E')
@@ -46,7 +45,6 @@ def P1(G: nx.Graph) -> None:
     ])
 
 
-@production
 def P2(G: nx.Graph) -> None:
     try:
         I = get_first_node_with_label(G, 'I')

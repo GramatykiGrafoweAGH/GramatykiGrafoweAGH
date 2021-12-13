@@ -1,9 +1,9 @@
 from collections import defaultdict
-from typing import Iterable, List, Tuple
+from typing import Callable, Iterable, List, Tuple
 
 import networkx as nx
 
-from GramatykiGrafoweAGH import Node, Production
+from GramatykiGrafoweAGH import Node
 from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError, SquareNotFoundError
 
 
@@ -90,14 +90,13 @@ def merge_two_nodes(G: nx.Graph, old1: Node, old2: Node) -> Node:
     return new
 
 
-def apply_productions(G: nx.Graph, productions: Iterable[Production]) -> nx.Graph:
-    # TODO: use itertools.reduce
+def apply_productions(G: nx.Graph, productions: Iterable[Callable[[nx.Graph], Node]]) -> nx.Graph:
     for production in productions:
-        G = production(G)
+        production(G)
     return G
 
 
-def apply_production_while_possible(G: nx.Graph, production: Production) -> nx.Graph:
+def apply_production_while_possible(G: nx.Graph, production: Callable[[nx.Graph], Node]) -> nx.Graph:
     while True:
         try:
             G = production(G)
