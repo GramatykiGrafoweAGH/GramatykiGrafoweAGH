@@ -1,8 +1,8 @@
-import pytest
 from typing import List
 
 from GramatykiGrafoweAGH import Graph, Node
 from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1
+
 
 def test_make_initial_graph():
     G = make_initial_graph()
@@ -22,7 +22,7 @@ def test_P1():
     pass
 
 
-def check_square(G : Graph, Es : List[Node], I : Node):
+def check_square(G: Graph, Es: List[Node], I: Node):
     for E in Es:
         assert E in G.neighbors(I)
 
@@ -44,7 +44,8 @@ def check_square(G : Graph, Es : List[Node], I : Node):
                 assert (E_not_neighbour.x + E.x) / 2 == neighbour.x
                 assert (E_not_neighbour.y + E.y) / 2 == neighbour.y
 
-def test_P1_izomorphic():
+
+def test_P1_isomorphic():
     G = Graph()
     original_E = Node(label='E', x=0.5, y=0.5, level=0)
     G.add_node(original_E)
@@ -67,13 +68,9 @@ def test_P1_izomorphic():
     assert len(Es) == 4
     assert len(Is) == 1
 
-    I : Node = Is[0]
+    I: Node = Is[0]
 
     check_square(G, Es, I)
-
-
-
-
 
 
 def test_P2():
