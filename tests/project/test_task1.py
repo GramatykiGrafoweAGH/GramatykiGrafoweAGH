@@ -83,5 +83,6 @@ def test_P1_vertex_removed():
     with pytest.raises(CannotApplyProductionError):
         P1(G)
 
+
 def test_P2():
     pass
