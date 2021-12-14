@@ -76,8 +76,8 @@ class Graph:
             self.add_node(node)
 
     def add_edge(self, u: Node, v: Node) -> None:
-        assert u in self.nodes, f'{u} not in graph'
-        assert v in self.nodes, f'{v} not in graph'
+        assert u in self, f'{u} not in graph'
+        assert v in self, f'{v} not in graph'
         self._G.add_edge(u, v)
 
     def add_edges(self, edges: Iterable[Tuple[Node, Node]]):
