@@ -4,7 +4,7 @@ from GramatykiGrafoweAGH import Graph
 from GramatykiGrafoweAGH.project.task4 import P7
 
 
+@pytest.mark.xfail(raises=NotImplementedError)
 def test_P7():
     G = Graph()
-    with pytest.raises(NotImplementedError):
-        P7(G)
+    P7(G)
