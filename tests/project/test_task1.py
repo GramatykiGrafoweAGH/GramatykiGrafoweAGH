@@ -1,6 +1,7 @@
+import pytest
 from typing import List
 
-from GramatykiGrafoweAGH import Graph, Node
+from GramatykiGrafoweAGH import Graph, Node, CannotApplyProductionError
 from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1
 
 
@@ -72,6 +73,15 @@ def test_P1_isomorphic():
 
     check_square(G, Es, I)
 
+
+def test_P1_vertex_removed():
+    """Empty graph"""
+    G = Graph()
+
+    assert G.number_of_nodes == 0
+
+    with pytest.raises(CannotApplyProductionError):
+        P1(G)
 
 def test_P2():
     pass
