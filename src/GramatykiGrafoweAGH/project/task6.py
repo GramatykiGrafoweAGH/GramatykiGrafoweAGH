@@ -1,5 +1,5 @@
-import networkx as nx
+from GramatykiGrafoweAGH import Graph
 
 
-def P9(G: nx.Graph) -> None:
+def P9(G: Graph) -> None:
     raise NotImplementedError()

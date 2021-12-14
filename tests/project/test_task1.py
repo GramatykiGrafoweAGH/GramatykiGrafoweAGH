@@ -4,8 +4,8 @@ from GramatykiGrafoweAGH.project.task1 import make_initial_graph
 def test_make_initial_graph():
     G = make_initial_graph()
 
-    assert G.number_of_nodes() == 1
-    assert G.number_of_edges() == 0
+    assert G.number_of_nodes == 1
+    assert G.number_of_edges == 0
 
     node, = G.nodes
 

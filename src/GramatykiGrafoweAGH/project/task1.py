@@ -1,20 +1,18 @@
-import networkx as nx
-
-from GramatykiGrafoweAGH import Node
+from GramatykiGrafoweAGH import Node, Graph
 from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError, SquareNotFoundError
-from GramatykiGrafoweAGH.utils import get_first_node_with_label, get_square_vertices, replace_node
+from GramatykiGrafoweAGH.project.utils import get_square_vertices
 
 
-def make_initial_graph() -> nx.Graph:
-    G = nx.Graph()
+def make_initial_graph() -> Graph:
+    G = Graph()
     E = Node(label='E', x=0.5, y=0.5, level=0)
     G.add_node(E)
     return G
 
 
-def P1(G: nx.Graph) -> None:
+def P1(G: Graph) -> None:
     try:
-        E = get_first_node_with_label(G, 'E')
+        E = G.get_first_node_with_label('E')
     except NodeNotFoundError:
         raise CannotApplyProductionError()
 
@@ -34,20 +32,20 @@ def P1(G: nx.Graph) -> None:
     E3 = Node(label='E', x=x3, y=y3, level=level + 1)
     E4 = Node(label='E', x=x4, y=y4, level=level + 1)
 
-    replace_node(G, E, e)
+    G.replace_node(E, e)
 
-    G.add_nodes_from([I, E1, E2, E3, E4])
+    G.add_nodes([I, E1, E2, E3, E4])
 
-    G.add_edges_from([
+    G.add_edges([
         (e, I),
         (I, E1), (I, E2), (I, E3), (I, E4),
         (E1, E2), (E2, E4), (E4, E3), (E3, E1),
     ])
 
 
-def P2(G: nx.Graph) -> None:
+def P2(G: Graph) -> None:
     try:
-        I = get_first_node_with_label(G, 'I')
+        I = G.get_first_node_with_label('I')
     except NodeNotFoundError:
         raise CannotApplyProductionError()
 
@@ -86,14 +84,14 @@ def P2(G: nx.Graph) -> None:
     E8 = Node(label='E', x=x8, y=y8, level=level + 1)
     E9 = Node(label='E', x=x9, y=y9, level=level + 1)
 
-    replace_node(G, I, i)
+    G.replace_node(I, i)
 
-    G.add_nodes_from([
+    G.add_nodes([
         I1, I2, I3, I4,
         E1, E2, E3, E4, E5, E6, E7, E8, E9,
     ])
 
-    G.add_edges_from([
+    G.add_edges([
         (i, I1), (i, I2), (i, I3), (i, I4),
         (I1, E1), (I1, E5), (I1, E9), (I1, E6),
         (I2, E5), (I2, E2), (I2, E7), (I2, E9),

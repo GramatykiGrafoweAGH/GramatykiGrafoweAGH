@@ -3,7 +3,7 @@ from typing import Dict, List, Optional, Tuple
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from GramatykiGrafoweAGH import Node
+from GramatykiGrafoweAGH import Node, Graph
 
 node_colors = {
     0: {
@@ -50,11 +50,12 @@ def calculate_layout(G: nx.Graph) -> Dict[int, Tuple[float, float]]:
     }
 
 
-def draw_graph(G: nx.Graph, *, level: Optional[int] = None) -> plt.Figure:
+def draw_graph(G: Graph, *, level: Optional[int] = None) -> plt.Figure:
     fig, ax = plt.subplots()
     ax.set_aspect('equal', adjustable='datalim')
     ax.set(xlabel='$x$', ylabel='$y$')
 
+    G = G._G
     if level is not None:
         G = G.subgraph([node for node in G.nodes if node.level == level])
 
@@ -66,6 +67,6 @@ def draw_graph(G: nx.Graph, *, level: Optional[int] = None) -> plt.Figure:
     return fig
 
 
-def show_graph(G: nx.Graph, **kwargs):
+def show_graph(G: Graph, **kwargs):
     draw_graph(G, **kwargs)
     plt.show()

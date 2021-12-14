@@ -1,25 +1,23 @@
-import networkx as nx
-
-from GramatykiGrafoweAGH import Node
-from GramatykiGrafoweAGH.utils import replace_node, merge_two_nodes
+from GramatykiGrafoweAGH import Node, Graph
 
 
 def test_replace_node():
-    G = nx.Graph()
+    G = Graph()
+
     A = Node(label='A', x=1, y=1, level=0)
     B = Node(label='B', x=2, y=2, level=0)
     C = Node(label='C', x=3, y=3, level=0)
 
-    G.add_nodes_from([A, B, C])
+    G.add_nodes([A, B, C])
 
-    G.add_edges_from([(A, B), (B, C)])
+    G.add_edges([(A, B), (B, C)])
 
     D = Node(label='D', x=4, y=4, level=0)
 
-    replace_node(G, B, D)
+    G.replace_node(B, D)
 
-    assert G.number_of_nodes() == 3
-    assert G.number_of_edges() == 2
+    assert G.number_of_nodes == 3
+    assert G.number_of_edges == 2
 
     assert B not in G
     assert D in G
@@ -30,21 +28,21 @@ def test_replace_node():
 
 
 def test_merge_two_nodes():
-    G = nx.Graph()
+    G = Graph()
 
     A = Node(label='A', x=1, y=1, level=0)
     B1 = Node(label='B', x=2, y=2, level=0)
     B2 = Node(label='B', x=2, y=2, level=0)
     C = Node(label='C', x=3, y=3, level=0)
 
-    G.add_nodes_from([A, B1, B2, C])
+    G.add_nodes([A, B1, B2, C])
 
-    G.add_edges_from([(A, B1), (B2, C)])
+    G.add_edges([(A, B1), (B2, C)])
 
-    B = merge_two_nodes(G, B1, B2)
+    B = G.merge_two_nodes(B1, B2)
 
-    assert G.number_of_nodes() == 3
-    assert G.number_of_edges() == 2
+    assert G.number_of_nodes == 3
+    assert G.number_of_edges == 2
 
     assert B1 not in G
     assert B2 not in G
