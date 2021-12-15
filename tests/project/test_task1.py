@@ -1,4 +1,5 @@
-from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P2
+from GramatykiGrafoweAGH.project.task1 import P2
+from GramatykiGrafoweAGH.project.utils import is_node_between
 from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
 import pytest
 from typing import List
@@ -115,7 +116,7 @@ def test_P1():
     pass
 
 
-def check_production(G: Graph, e: Node):
+def check_if_production_applied(G: Graph, e: Node):
     Is = list(filter(lambda n: n.level == 1 and n.label == "I", G.neighbors(e)))
 
     assert len(Is) == 1
@@ -143,9 +144,7 @@ def check_square(G: Graph, Es: List[Node], I: Node):
                 assert neighbour.label == "I"
                 E_not_neighbours = [E1 for E1 in Es if E1 not in G.neighbors(E) and E1 != E]
                 assert len(E_not_neighbours) == 1
-                E_not_neighbour = E_not_neighbours[0]
-                assert (E_not_neighbour.x + E.x) / 2 == neighbour.x
-                assert (E_not_neighbour.y + E.y) / 2 == neighbour.y
+                assert is_node_between(E_not_neighbours[0], neighbour, E)
 
 
 def test_P1_isomorphic():
@@ -182,8 +181,7 @@ def test_P1_vertex_removed():
 
     assert G.number_of_nodes == 0
 
-    with pytest.raises(CannotApplyProductionError):
-        P1(G)
+    assert_production_cannot_be_applied(P1, G)
 
 
 def test_P1_edge_removed():
@@ -197,8 +195,7 @@ def test_P1_label_changed():
     e = Node(label='e', x=0.5, y=0.5, level=0)
     G.add_node(e)
 
-    with pytest.raises(CannotApplyProductionError):
-        P1(G)
+    assert_production_cannot_be_applied(P1, G)
 
 
 def test_P1_subgraph():
@@ -223,7 +220,7 @@ def test_P1_subgraph():
     assert len(es) == 1
     e = es[0]
 
-    check_production(G, e)
+    check_if_production_applied(G, e)
 
 
 def test_P1_subgraph_dont_apply():
@@ -243,8 +240,7 @@ def test_P1_subgraph_dont_apply():
     G = make_graph()
     nodes = G.nodes
 
-    with pytest.raises(CannotApplyProductionError):
-        P1(G)
+    assert_production_cannot_be_applied(P1, G)
 
     G1 = make_graph()
 
