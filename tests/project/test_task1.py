@@ -134,5 +134,34 @@ def test_P1_subgraph():
     check_production(G, e)
 
 
+
+def test_P1_subgraph_dont_apply():
+    def make_graph() -> Graph:
+        G = Graph()
+        I = Node(label='I', x=0.5, y=0.5, level=0)
+        i0 = Node(label='i', x=2.0, y=2.0, level=0)
+        i1 = Node(label='i', x=-1.0, y=-1.0, level=0)
+
+        G.add_node(I)
+        G.add_node(i0)
+        G.add_node(i1)
+
+        G.add_edges([(i0, I), (I, i1)])
+        return G
+
+    G = make_graph()
+    nodes = G.nodes
+
+    with pytest.raises(CannotApplyProductionError):
+        P1(G)
+
+    G1 = make_graph()
+
+    assert G.number_of_nodes == G1.number_of_nodes
+    assert G.number_of_edges == G1.number_of_edges
+
+    assert nodes == G.nodes
+
+
 def test_P2():
     pass
