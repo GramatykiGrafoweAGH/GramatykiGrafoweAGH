@@ -4,6 +4,7 @@ from typing import List
 from GramatykiGrafoweAGH import Graph, Node, CannotApplyProductionError
 from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1
 
+
 def test_make_initial_graph():
     G = make_initial_graph()
 
@@ -40,7 +41,6 @@ def check_square(G: Graph, Es: List[Node], I: Node):
 
     level_0 = list(filter(lambda n: n.level == 0 and n.label == "e", G.nodes))
     assert len(level_0) == 1
-    e = level_0[0]
 
     for E in Es:
         for neighbour in G.neighbors(E):
