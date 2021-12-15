@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from collections import defaultdict, Iterable
+from collections import defaultdict
+from typing import Iterable
 from dataclasses import dataclass, field
 from itertools import count
 from typing import List, Tuple, Callable
@@ -68,7 +69,7 @@ class Graph:
         return self._G.number_of_edges()
 
     def add_node(self, node: Node) -> None:
-        self._G.add_node(node)
+        self._G.add_node(node, node=node)
         self._node_positions.add_node(node)
 
     def add_nodes(self, nodes: Iterable[Node]) -> None:
@@ -94,6 +95,11 @@ class Graph:
     def remove_nodes(self, nodes: Iterable[Node]) -> None:
         for node in nodes:
             self.remove_node(node)
+
+    def remove_edge(self, u: Node, v: Node) -> None:
+        assert u in self, f'{u} not in graph'
+        assert v in self, f'{v} not in graph'
+        self._G.remove_edge(u, v)
 
     def replace_node(self, old: Node, new: Node) -> None:
         neighbors = self.neighbors(old)
@@ -157,6 +163,14 @@ class Graph:
     def assert_no_duplicated_nodes(self) -> None:
         count = self.count_duplicates()
         assert not count, f'There are {count} duplicated nodes'
+
+    def is_isomorphic_with(self, other: Graph) -> bool:
+        def node_match(a: dict, b: dict) -> bool:
+            a = a['node']
+            b = b['node']
+            return a.label == b.label and a.x == b.x and a.y == b.y and a.level == b.level
+
+        return nx.is_isomorphic(self._G, other._G, node_match=node_match)
 
     def show(self):
         from GramatykiGrafoweAGH.visualization import show_graph
