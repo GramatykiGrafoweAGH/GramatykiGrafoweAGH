@@ -2,6 +2,7 @@ from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P2
 from GramatykiGrafoweAGH import Node, Graph, CannotApplyProductionError
 import pytest
 
+
 def make_P2_left_side_graph():
     G = Graph()
 
@@ -9,7 +10,7 @@ def make_P2_left_side_graph():
     level = 1
 
     x1, y1 = -0.5, -0.5
-    x2, y2 = 0.5,- 0.5
+    x2, y2 = 0.5, -0.5
     x3, y3 = - 0.5, 0.5
     x4, y4 = 0.5, 0.5
 
@@ -27,6 +28,7 @@ def make_P2_left_side_graph():
     ])
 
     return G
+
 
 def make_P2_right_side_graph():
     G = Graph()
@@ -58,7 +60,7 @@ def make_P2_right_side_graph():
     x8, y8 = (0.0, 0.5)
     x9, y9 = (0.0, 0.0)
 
-    i = Node(label='i', x=I.x, y=I.y, level=level+1)
+    i = Node(label='i', x=I.x, y=I.y, level=level + 1)
 
     I1 = Node(label='I', x=(x1 + x9) / 2, y=(y1 + y9) / 2, level=level + 2)
     I2 = Node(label='I', x=(x2 + x9) / 2, y=(y2 + y9) / 2, level=level + 2)
@@ -97,9 +99,11 @@ def make_P2_right_side_graph():
 
     return G
 
+
 def production_cannot_be_applied(P, G):
     with pytest.raises(CannotApplyProductionError):
         P(G)
+
 
 def test_make_initial_graph():
     G = make_initial_graph()
@@ -120,30 +124,29 @@ def test_P1():
 
 
 def test_P2():
-
-# test applicaiton of P2 to the graph isomorphic to left side of P2
+    # test applicaiton of P2 to the graph isomorphic to left side of P2
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
-    
+
     P2(G)
     assert G.is_isomorphic_with(G2)
 
-# test applicaiton of P2 to the graph isomorphic to left side of P2 with deleted one node
+    # test applicaiton of P2 to the graph isomorphic to left side of P2 with deleted one node
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
     G.remove_node(G.get_first_node_with_label('E'))
-    
+
     production_cannot_be_applied(P2, G)
 
-# test applicaiton of P2 to the graph isomorphic to left side of P2 with deleted one edge
+    # test applicaiton of P2 to the graph isomorphic to left side of P2 with deleted one edge
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
     u = G.get_first_node_with_label('E')
     G.remove_edge(u, [v for v in G.neighbors(u)][0])
-    
+
     production_cannot_be_applied(P2, G)
 
-# test applicaiton of P2 to the graph isomorphic to left side of P2 with not appropiate label
+    # test applicaiton of P2 to the graph isomorphic to left side of P2 with not appropiate label
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
     u = G.get_first_node_with_label('E')
@@ -151,23 +154,22 @@ def test_P2():
 
     production_cannot_be_applied(P2, G)
 
-# test applicaiton of P2 to the graph isomorphic to left side of P2 with not appropiate coordinates
+    # test applicaiton of P2 to the graph isomorphic to left side of P2 with not appropiate coordinates
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
     u = G.get_first_node_with_label('E')
-    G.replace_node(u, Node(label='H', x=u.x, y=u.y+0.9, level=u.level))
+    G.replace_node(u, Node(label='H', x=u.x, y=u.y + 0.9, level=u.level))
 
     production_cannot_be_applied(P2, G)
 
-
-# test applicaiton of P2 to the graph with the subgraph isomorphic to left side of P2 
+    # test applicaiton of P2 to the graph with the subgraph isomorphic to left side of P2
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
     u = Node(label='S', x=-1, y=-1, level=2)
     G.add_node(u)
     v = G.get_first_node_with_label('E')
     G.add_edge(u, v)
-    
+
     G2.add_node(u)
     v = G2.get_first_node_with_label('E')
     G2.add_edge(u, v)
@@ -175,14 +177,11 @@ def test_P2():
     P2(G)
     assert G.is_isomorphic_with(G2)
 
-# test invariance of the left side graph when production cannot be applied
+    # test invariance of the left side graph when production cannot be applied
     G = make_P2_left_side_graph()
     G2 = make_P2_left_side_graph()
     G.remove_node(G.get_first_node_with_label('E'))
     G2.remove_node(G2.get_first_node_with_label('E'))
-    
+
     production_cannot_be_applied(P2, G)
     assert G.is_isomorphic_with(G2)
-
-
-test_P2()
