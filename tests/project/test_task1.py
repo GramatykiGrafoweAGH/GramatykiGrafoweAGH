@@ -1,6 +1,6 @@
 from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P2
-from GramatykiGrafoweAGH import Node, Graph, CannotApplyProductionError
-import pytest
+from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
+from GramatykiGrafoweAGH import Node, Graph
 
 
 def make_P2_left_side_graph():
@@ -46,16 +46,16 @@ def make_P2_right_side_graph():
     x8, y8 = 0.0, 0.5
     x9, y9 = 0.0, 0.0
 
-    I = Node(label='i', x=x0, y=y0, level=level + 1)
+    i = Node(label='i', x=x0, y=y0, level=level + 1)
     E1 = Node(label='E', x=x1, y=y1, level=level + 1)
     E2 = Node(label='E', x=x2, y=y2, level=level + 1)
     E3 = Node(label='E', x=x3, y=y3, level=level + 1)
     E4 = Node(label='E', x=x4, y=y4, level=level + 1)
 
-    G.add_nodes([I, E1, E2, E3, E4])
+    G.add_nodes([i, E1, E2, E3, E4])
 
     G.add_edges([
-        (I, E1), (I, E2), (I, E3), (I, E4),
+        (i, E1), (i, E2), (i, E3), (i, E4),
         (E1, E2), (E2, E4), (E4, E3), (E3, E1),
     ])
 
@@ -80,7 +80,7 @@ def make_P2_right_side_graph():
     ])
 
     G.add_edges([
-        (I, I1), (I, I2), (I, I3), (I, I4),
+        (i, I1), (i, I2), (i, I3), (i, I4),
         (I1, E1), (I1, E5), (I1, E9), (I1, E6),
         (I2, E5), (I2, E2), (I2, E7), (I2, E9),
         (I3, E6), (I3, E9), (I3, E8), (I3, E3),
@@ -93,11 +93,6 @@ def make_P2_right_side_graph():
     ])
 
     return G
-
-
-def assert_production_cannot_be_applied(P, G):
-    with pytest.raises(CannotApplyProductionError):
-        P(G)
 
 
 def test_make_initial_graph():
@@ -119,7 +114,7 @@ def test_P1():
 
 
 def test_P2_isomorphic_left_side():
-    # test applicaiton of P2 to the graph isomorphic to left side of P2
+    # test application of P2 to the graph isomorphic to left side of P2
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
 
@@ -128,7 +123,7 @@ def test_P2_isomorphic_left_side():
 
 
 def test_P2_left_side_deleted_node():
-    # test applicaiton of P2 to the graph isomorphic to left side of P2 with deleted one node
+    # test application of P2 to the graph isomorphic to left side of P2 with deleted one node
     G = make_P2_left_side_graph()
 
     u = G.get_first_node_with_label('E')
@@ -138,7 +133,7 @@ def test_P2_left_side_deleted_node():
 
 
 def test_P2_left_side_deleted_edge():
-    # test applicaiton of P2 to the graph isomorphic to left side of P2 with deleted one edge
+    # test application of P2 to the graph isomorphic to left side of P2 with deleted one edge
     G = make_P2_left_side_graph()
     u = G.get_first_node_with_label('E')
     G.remove_edge(u, list(G.neighbors(u))[0])
@@ -147,7 +142,7 @@ def test_P2_left_side_deleted_edge():
 
 
 def test_P2_left_side_wrong_level():
-    # test applicaiton of P2 to the graph isomorphic to left side of P2 with not appropiate label
+    # test application of P2 to the graph isomorphic to left side of P2 with not appropiate label
     G = make_P2_left_side_graph()
     u = G.get_first_node_with_label('E')
     G.replace_node(u, Node(label='H', x=u.x, y=u.y, level=u.level))
@@ -156,7 +151,7 @@ def test_P2_left_side_wrong_level():
 
 
 def test_P2_left_side_wrong_coordinates():
-    # test applicaiton of P2 to the graph isomorphic to left side of P2 with not appropiate coordinates
+    # test application of P2 to the graph isomorphic to left side of P2 with not appropiate coordinates
     G = make_P2_left_side_graph()
     u = G.get_first_node_with_label('E')
     G.replace_node(u, Node(label='H', x=u.x, y=u.y + 0.9, level=u.level))
@@ -165,7 +160,7 @@ def test_P2_left_side_wrong_coordinates():
 
 
 def test_P2_left_side_subgraph():
-    # test applicaiton of P2 to the graph with the subgraph isomorphic to left side of P2
+    # test application of P2 to the graph with the subgraph isomorphic to left side of P2
     G = make_P2_left_side_graph()
     G2 = make_P2_right_side_graph()
     u = Node(label='S', x=-1, y=-1, level=2)
