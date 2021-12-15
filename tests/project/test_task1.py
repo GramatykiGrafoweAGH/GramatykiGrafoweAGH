@@ -134,7 +134,6 @@ def test_P1_subgraph():
     check_production(G, e)
 
 
-
 def test_P1_subgraph_dont_apply():
     def make_graph() -> Graph:
         G = Graph()
