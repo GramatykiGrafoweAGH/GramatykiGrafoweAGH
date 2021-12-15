@@ -1,11 +1,11 @@
 from GramatykiGrafoweAGH.project.task1 import P2
 from GramatykiGrafoweAGH.project.utils import is_node_between
 from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
-import pytest
 from typing import List
 
-from GramatykiGrafoweAGH import Graph, Node, CannotApplyProductionError
+from GramatykiGrafoweAGH import Graph, Node
 from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1
+
 
 def make_P2_left_side_graph():
     G = Graph()
@@ -97,6 +97,7 @@ def make_P2_right_side_graph():
     ])
 
     return G
+
 
 def test_make_initial_graph():
     G = make_initial_graph()
