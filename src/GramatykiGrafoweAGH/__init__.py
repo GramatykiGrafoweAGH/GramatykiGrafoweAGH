@@ -48,6 +48,12 @@ class NodePositions:
         return sum(1 for group in self._dict.values() if len(group) >= 2)
 
 
+def node_match(a: dict, b: dict) -> bool:
+    a = a['node']
+    b = b['node']
+    return a.label == b.label and a.x == b.x and a.y == b.y and a.level == b.level
+
+
 class Graph:
     def __init__(self):
         self._G = nx.Graph()
@@ -165,11 +171,6 @@ class Graph:
         assert not count, f'There are {count} duplicated nodes'
 
     def is_isomorphic_with(self, other: Graph) -> bool:
-        def node_match(a: dict, b: dict) -> bool:
-            a = a['node']
-            b = b['node']
-            return a.label == b.label and a.x == b.x and a.y == b.y and a.level == b.level
-
         return nx.is_isomorphic(self._G, other._G, node_match=node_match)
 
     def show(self):
