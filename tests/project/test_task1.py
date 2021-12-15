@@ -4,7 +4,6 @@ from typing import List
 from GramatykiGrafoweAGH import Graph, Node, CannotApplyProductionError
 from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1
 
-
 def test_make_initial_graph():
     G = make_initial_graph()
 
@@ -23,14 +22,25 @@ def test_P1():
     pass
 
 
+def check_production(G: Graph, e: Node):
+    Is = list(filter(lambda n: n.level == 1 and n.label == "I", G.neighbors(e)))
+
+    assert len(Is) == 1
+    I = Is[0]
+
+    Es = list(filter(lambda n: n.level == 1, G.neighbors(I)))
+    assert len(Es) == 4
+
+    check_square(G, Es, I)
+
+
 def check_square(G: Graph, Es: List[Node], I: Node):
     for E in Es:
         assert E in G.neighbors(I)
 
-    level_0 = list(filter(lambda n: n.level == 0, G.nodes))
+    level_0 = list(filter(lambda n: n.level == 0 and n.label == "e", G.nodes))
     assert len(level_0) == 1
     e = level_0[0]
-    assert e.label == "e"
 
     for E in Es:
         for neighbour in G.neighbors(E):
@@ -97,6 +107,31 @@ def test_P1_label_changed():
 
     with pytest.raises(CannotApplyProductionError):
         P1(G)
+
+
+def test_P1_subgraph():
+    G = Graph()
+    E = Node(label='E', x=0.5, y=0.5, level=0)
+    i0 = Node(label='i', x=2.0, y=2.0, level=0)
+    i1 = Node(label='i', x=-1.0, y=-1.0, level=0)
+
+    G.add_node(E)
+    G.add_node(i0)
+    G.add_node(i1)
+
+    G.add_edges([(i0, E), (E, i1)])
+    P1(G)
+
+    assert len(G.nodes) == 8
+
+    level_0 = list(filter(lambda n: n.level == 0, G.nodes))
+    assert len(level_0) == 3
+
+    es = list(filter(lambda n: n.label == "e", level_0))
+    assert len(es) == 1
+    e = es[0]
+
+    check_production(G, e)
 
 
 def test_P2():
