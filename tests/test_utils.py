@@ -22,9 +22,9 @@ def test_replace_node():
     assert B not in G
     assert D in G
 
-    assert set(G.neighbors(A)) == {D}
-    assert set(G.neighbors(C)) == {D}
-    assert set(G.neighbors(D)) == {A, C}
+    assert set(G.get_neighbors(A)) == {D}
+    assert set(G.get_neighbors(C)) == {D}
+    assert set(G.get_neighbors(D)) == {A, C}
 
 
 def test_merge_two_nodes():
@@ -48,6 +48,6 @@ def test_merge_two_nodes():
     assert B2 not in G
     assert B in G
 
-    assert set(G.neighbors(A)) == {B}
-    assert set(G.neighbors(C)) == {B}
-    assert set(G.neighbors(B)) == {A, C}
+    assert set(G.get_neighbors(A)) == {B}
+    assert set(G.get_neighbors(C)) == {B}
+    assert set(G.get_neighbors(B)) == {A, C}

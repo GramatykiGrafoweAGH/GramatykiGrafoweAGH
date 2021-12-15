@@ -118,12 +118,12 @@ def test_P1():
 
 
 def check_if_production_applied(G: Graph, e: Node):
-    Is = list(filter(lambda n: n.level == 1 and n.label == "I", G.neighbors(e)))
+    Is = list(filter(lambda n: n.level == 1 and n.label == "I", G.get_neighbors(e)))
 
     assert len(Is) == 1
     I = Is[0]
 
-    Es = list(filter(lambda n: n.level == 1, G.neighbors(I)))
+    Es = list(filter(lambda n: n.level == 1, G.get_neighbors(I)))
     assert len(Es) == 4
 
     check_square(G, Es, I)
@@ -131,19 +131,19 @@ def check_if_production_applied(G: Graph, e: Node):
 
 def check_square(G: Graph, Es: List[Node], I: Node):
     for E in Es:
-        assert E in G.neighbors(I)
+        assert E in G.get_neighbors(I)
 
     level_0 = list(filter(lambda n: n.level == 0 and n.label == "e", G.nodes))
     assert len(level_0) == 1
 
     for E in Es:
-        for neighbour in G.neighbors(E):
+        for neighbour in G.get_neighbors(E):
             if neighbour.label == "E":
                 assert neighbour in Es
                 assert bool(neighbour.x == E.x) != bool(neighbour.y == E.y)
             else:
                 assert neighbour.label == "I"
-                E_not_neighbours = [E1 for E1 in Es if E1 not in G.neighbors(E) and E1 != E]
+                E_not_neighbours = [E1 for E1 in Es if E1 not in G.get_neighbors(E) and E1 != E]
                 assert len(E_not_neighbours) == 1
                 assert is_node_between(E_not_neighbours[0], neighbour, E)
 
@@ -274,7 +274,7 @@ def test_P2_left_side_deleted_edge():
     # test application of P2 to the graph isomorphic to left side of P2 with deleted one edge
     G = make_P2_left_side_graph()
     u = G.get_first_node_with_label('E')
-    G.remove_edge(u, list(G.neighbors(u))[0])
+    G.remove_edge(u, list(G.get_neighbors(u))[0])
 
     assert_production_cannot_be_applied(P2, G)
 

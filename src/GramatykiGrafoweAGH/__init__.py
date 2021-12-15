@@ -108,14 +108,14 @@ class Graph:
         self._G.remove_edge(u, v)
 
     def replace_node(self, old: Node, new: Node) -> None:
-        neighbors = self.neighbors(old)
+        neighbors = self.get_neighbors(old)
         self.remove_node(old)
         self.add_node(new)
         self.add_edges((n, new) for n in neighbors)
 
     def merge_two_nodes(self, old1: Node, old2: Node) -> Node:
         assert old1.label == old2.label and old1.x == old2.x and old1.y == old2.y and old1.level == old2.level
-        neighbors = set(self.neighbors(old1)) | set(self.neighbors(old2)) - {old1, old2}
+        neighbors = set(self.get_neighbors(old1)) | set(self.get_neighbors(old2)) - {old1, old2}
         self.remove_node(old1)
         self.remove_node(old2)
         new = Node(label=old1.label, x=old1.x, y=old1.y, level=old1.level)
@@ -123,7 +123,7 @@ class Graph:
         self.add_edges((n, new) for n in neighbors)
         return new
 
-    def neighbors(self, node: Node):
+    def get_neighbors(self, node: Node):
         return self._G.neighbors(node)
 
     def get_first_node_with_label(self, label: str) -> Node:
@@ -133,11 +133,11 @@ class Graph:
         return min(found, key=lambda node: (node.level, node.id))
 
     def get_neighbors_with_label(self, node: Node, label: str) -> List[Node]:
-        return [n for n in self.neighbors(node) if n.label == label]
+        return [n for n in self.get_neighbors(node) if n.label == label]
 
     def get_common_neighbors_with_label(self, a: Node, b: Node, label: str) -> Iterable[Node]:
-        for node in self.neighbors(a):
-            if node.label == label and node in self.neighbors(b):
+        for node in self.get_neighbors(a):
+            if node.label == label and node in self.get_neighbors(b):
                 yield node
 
     def apply_production(self, production: Callable[[Graph], None], *, times: int = 1) -> Graph:
