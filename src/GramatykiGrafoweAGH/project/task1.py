@@ -2,6 +2,7 @@ from GramatykiGrafoweAGH import Node, Graph
 from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError, SquareNotFoundError
 from GramatykiGrafoweAGH.project.utils import get_square_vertices
 
+
 def make_initial_graph() -> Graph:
     G = Graph()
     E = Node(label='E', x=0.5, y=0.5, level=0)
