@@ -83,6 +83,20 @@ def test_P1_vertex_removed():
     with pytest.raises(CannotApplyProductionError):
         P1(G)
 
+def test_P1_edge_removed():
+    """Inapplicable"""
+    pass
+
+
+def test_P1_label_changed():
+    """small letter e"""
+    G = Graph()
+    e = Node(label='e', x=0.5, y=0.5, level=0)
+    G.add_node(e)
+
+    with pytest.raises(CannotApplyProductionError):
+        P1(G)
+
 
 def test_P2():
     pass
