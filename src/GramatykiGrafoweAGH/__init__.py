@@ -1,6 +1,7 @@
 from __future__ import annotations
 
-from collections import defaultdict, Iterable
+from collections import defaultdict
+from collections.abc import Iterable
 from dataclasses import dataclass, field
 from itertools import count
 from typing import List, Tuple, Callable
