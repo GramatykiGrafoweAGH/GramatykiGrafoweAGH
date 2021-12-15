@@ -1,12 +1,12 @@
 from __future__ import annotations
 
 from collections import defaultdict
-from typing import Iterable
 from dataclasses import dataclass, field
 from itertools import count
-from typing import List, Tuple, Callable
+from typing import List, Iterable, Tuple, Callable
 
 import networkx as nx
+from networkx.classes.reportviews import NodeView
 
 from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError
 
@@ -57,7 +57,7 @@ class Graph:
         return self.has_node(node)
 
     @property
-    def nodes(self):
+    def nodes(self) -> NodeView:
         return self._G.nodes
 
     @property
