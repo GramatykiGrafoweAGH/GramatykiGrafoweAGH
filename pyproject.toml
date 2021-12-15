@@ -3,6 +3,7 @@ requires = [
     "setuptools>=42",
     "wheel",
     "networkx",
-    "matplotlib"
+    "matplotlib",
+    "pytest"
 ]
 build-backend = "setuptools.build_meta"
