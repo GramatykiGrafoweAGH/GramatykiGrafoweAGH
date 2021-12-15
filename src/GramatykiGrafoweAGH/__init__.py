@@ -19,6 +19,11 @@ class Node:
     level: int
     id: int = field(default_factory=count().__next__, init=False)
 
+    def node_match(a: dict, b: dict) -> bool:
+        a = a['node']
+        b = b['node']
+        return a.label == b.label and a.x == b.x and a.y == b.y and a.level == b.level
+
 
 class NodePositions:
     def __init__(self):
@@ -69,7 +74,7 @@ class Graph:
         return self._G.number_of_edges()
 
     def add_node(self, node: Node) -> None:
-        self._G.add_node(node)
+        self._G.add_node(node, node=node)
         self._node_positions.add_node(node)
 
     def add_nodes(self, nodes: Iterable[Node]) -> None:
@@ -165,7 +170,7 @@ class Graph:
         assert not count, f'There are {count} duplicated nodes'
 
     def is_isomorphic_with(self, other: Graph) -> bool:
-        return nx.is_isomorphic(self._G, other._G)
+        return nx.is_isomorphic(self._G, other._G, node_match=Node.node_match)
 
     def show(self):
         from GramatykiGrafoweAGH.visualization import show_graph
