@@ -95,6 +95,11 @@ class Graph:
         for node in nodes:
             self.remove_node(node)
 
+    def remove_edge(self, u: Node, v: Node) -> None:
+        assert u in self, f'{u} not in graph'
+        assert v in self, f'{v} not in graph'
+        self._G.remove_edge(u, v)
+
     def replace_node(self, old: Node, new: Node) -> None:
         neighbors = self.neighbors(old)
         self.remove_node(old)
@@ -157,6 +162,9 @@ class Graph:
     def assert_no_duplicated_nodes(self) -> None:
         count = self.count_duplicates()
         assert not count, f'There are {count} duplicated nodes'
+
+    def is_isomorphic_with(self, other: Graph) -> bool:
+        return nx.is_isomorphic(self._G, other._G)
 
     def show(self):
         from GramatykiGrafoweAGH.visualization import show_graph
