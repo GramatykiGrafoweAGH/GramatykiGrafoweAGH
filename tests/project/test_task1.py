@@ -1,18 +1,47 @@
-from GramatykiGrafoweAGH.project.task1 import P2
-from GramatykiGrafoweAGH.project.utils import is_node_between
-from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
 from typing import List
 
 from GramatykiGrafoweAGH import Graph, Node
-from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1
+from GramatykiGrafoweAGH.project.task1 import make_initial_graph, P1, P2
+from GramatykiGrafoweAGH.project.utils import is_node_between
+from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
+
+
+def assert_production_P1_was_applied(G: Graph, e: Node):
+    Is = list(filter(lambda n: n.level == 1 and n.label == 'I', G.get_neighbors(e)))
+
+    assert len(Is) == 1
+    I = Is[0]
+
+    Es = list(filter(lambda n: n.level == 1, G.get_neighbors(I)))
+    assert len(Es) == 4
+
+    assert_is_square(G, Es, I)
+
+
+def assert_is_square(G: Graph, Es: List[Node], I: Node):
+    for E in Es:
+        assert E in G.get_neighbors(I)
+
+    level_0 = list(filter(lambda n: n.level == 0 and n.label == 'e', G.nodes))
+    assert len(level_0) == 1
+
+    for E in Es:
+        for neighbour in G.get_neighbors(E):
+            if neighbour.label == 'E':
+                assert neighbour in Es
+                assert bool(neighbour.x == E.x) != bool(neighbour.y == E.y)
+            else:
+                assert neighbour.label == 'I'
+                E_not_neighbours = [E1 for E1 in Es if E1 not in G.get_neighbors(E) and E1 != E]
+                assert len(E_not_neighbours) == 1
+                assert is_node_between(E_not_neighbours[0], neighbour, E)
 
 
 def make_P2_left_side_graph():
     G = Graph()
 
-    x0, y0 = 0, 0
     level = 1
-
+    x0, y0 = 0, 0
     x1, y1 = -0.5, -0.5
     x2, y2 = 0.5, -0.5
     x3, y3 = -0.5, 0.5
@@ -38,7 +67,6 @@ def make_P2_right_side_graph():
     G = Graph()
 
     level = 1
-
     x0, y0 = 0, 0
     x1, y1 = -0.5, -0.5
     x2, y2 = 0.5, -0.5
@@ -113,41 +141,6 @@ def test_make_initial_graph():
     assert node.level == 0
 
 
-def test_P1():
-    pass
-
-
-def check_if_production_applied(G: Graph, e: Node):
-    Is = list(filter(lambda n: n.level == 1 and n.label == "I", G.get_neighbors(e)))
-
-    assert len(Is) == 1
-    I = Is[0]
-
-    Es = list(filter(lambda n: n.level == 1, G.get_neighbors(I)))
-    assert len(Es) == 4
-
-    check_square(G, Es, I)
-
-
-def check_square(G: Graph, Es: List[Node], I: Node):
-    for E in Es:
-        assert E in G.get_neighbors(I)
-
-    level_0 = list(filter(lambda n: n.level == 0 and n.label == "e", G.nodes))
-    assert len(level_0) == 1
-
-    for E in Es:
-        for neighbour in G.get_neighbors(E):
-            if neighbour.label == "E":
-                assert neighbour in Es
-                assert bool(neighbour.x == E.x) != bool(neighbour.y == E.y)
-            else:
-                assert neighbour.label == "I"
-                E_not_neighbours = [E1 for E1 in Es if E1 not in G.get_neighbors(E) and E1 != E]
-                assert len(E_not_neighbours) == 1
-                assert is_node_between(E_not_neighbours[0], neighbour, E)
-
-
 def test_P1_isomorphic():
     G = Graph()
     original_E = Node(label='E', x=0.5, y=0.5, level=0)
@@ -160,20 +153,20 @@ def test_P1_isomorphic():
     level_0 = list(filter(lambda n: n.level == 0, G.nodes))
     assert len(level_0) == 1
     e = level_0[0]
-    assert e.label == "e"
+    assert e.label == 'e'
 
     level_1 = list(filter(lambda n: n.level == 1, G.nodes))
     assert len(level_1) == 5
 
-    Es = [n for n in level_1 if n.label == "E"]
-    Is = [n for n in level_1 if n.label == "I"]
+    Es = [n for n in level_1 if n.label == 'E']
+    Is = [n for n in level_1 if n.label == 'I']
 
     assert len(Es) == 4
     assert len(Is) == 1
 
     I: Node = Is[0]
 
-    check_square(G, Es, I)
+    assert_is_square(G, Es, I)
 
 
 def test_P1_vertex_removed():
@@ -217,11 +210,11 @@ def test_P1_subgraph():
     level_0 = list(filter(lambda n: n.level == 0, G.nodes))
     assert len(level_0) == 3
 
-    es = list(filter(lambda n: n.label == "e", level_0))
+    es = list(filter(lambda n: n.label == 'e', level_0))
     assert len(es) == 1
     e = es[0]
 
-    check_if_production_applied(G, e)
+    assert_production_P1_was_applied(G, e)
 
 
 def test_P1_subgraph_dont_apply():
@@ -254,18 +247,18 @@ def test_P1_subgraph_dont_apply():
 def test_P2_isomorphic_left_side():
     # test application of P2 to the graph isomorphic to left side of P2
     G = make_P2_left_side_graph()
-    G2 = make_P2_right_side_graph()
+    expected = make_P2_right_side_graph()
 
     P2(G)
-    assert G.is_isomorphic_with(G2)
+
+    assert G.is_isomorphic_with(expected)
 
 
 def test_P2_left_side_deleted_node():
     # test application of P2 to the graph isomorphic to left side of P2 with deleted one node
     G = make_P2_left_side_graph()
-
-    u = G.get_first_node_with_label('E')
-    G.remove_node(u)
+    E = G.get_first_node_with_label('E')
+    G.remove_node(E)
 
     assert_production_cannot_be_applied(P2, G)
 
@@ -273,26 +266,17 @@ def test_P2_left_side_deleted_node():
 def test_P2_left_side_deleted_edge():
     # test application of P2 to the graph isomorphic to left side of P2 with deleted one edge
     G = make_P2_left_side_graph()
-    u = G.get_first_node_with_label('E')
-    G.remove_edge(u, list(G.get_neighbors(u))[0])
+    E = G.get_first_node_with_label('E')
+    G.remove_edge(E, list(G.get_neighbors(E))[0])
 
     assert_production_cannot_be_applied(P2, G)
 
 
-def test_P2_left_side_wrong_level():
+def test_P2_left_side_wrong_label():
     # test application of P2 to the graph isomorphic to left side of P2 with not appropiate label
     G = make_P2_left_side_graph()
-    u = G.get_first_node_with_label('E')
-    G.replace_node(u, Node(label='H', x=u.x, y=u.y, level=u.level))
-
-    assert_production_cannot_be_applied(P2, G)
-
-
-def test_P2_left_side_wrong_coordinates():
-    # test application of P2 to the graph isomorphic to left side of P2 with not appropiate coordinates
-    G = make_P2_left_side_graph()
-    u = G.get_first_node_with_label('E')
-    G.replace_node(u, Node(label='H', x=u.x, y=u.y + 0.9, level=u.level))
+    E = G.get_first_node_with_label('E')
+    G.replace_node(E, Node(label='e', x=E.x, y=E.y, level=E.level))
 
     assert_production_cannot_be_applied(P2, G)
 
@@ -300,30 +284,33 @@ def test_P2_left_side_wrong_coordinates():
 def test_P2_left_side_subgraph():
     # test application of P2 to the graph with the subgraph isomorphic to left side of P2
     G = make_P2_left_side_graph()
-    G2 = make_P2_right_side_graph()
-    u = Node(label='S', x=-1, y=-1, level=2)
-    G.add_node(u)
-    v = G.get_first_node_with_label('E')
-    G.add_edge(u, v)
+    expected = make_P2_right_side_graph()
 
-    G2.add_node(u)
-    v = G2.get_first_node_with_label('E')
-    G2.add_edge(u, v)
+    def add_node(G: Graph) -> None:
+        E = G.get_first_node_with_label('E')
+        S = Node(label='S', x=-1, y=-1, level=2)
+        G.add_node(S)
+        G.add_edge(E, S)
+
+    add_node(G)
+    add_node(expected)
 
     P2(G)
-    assert G.is_isomorphic_with(G2)
+
+    assert G.is_isomorphic_with(expected)
 
 
 def test_P2_left_side_invariance():
     # test invariance of the left side graph when production cannot be applied
     G = make_P2_left_side_graph()
-    G2 = make_P2_left_side_graph()
+    expected = make_P2_left_side_graph()
 
-    u = G.get_first_node_with_label('E')
-    G.remove_node(u)
+    def remove_node(G: Graph) -> None:
+        E = G.get_first_node_with_label('E')
+        G.remove_node(E)
 
-    u2 = G2.get_first_node_with_label('E')
-    G2.remove_node(u2)
+    remove_node(G)
+    remove_node(expected)
 
     assert_production_cannot_be_applied(P2, G)
-    assert G.is_isomorphic_with(G2)
+    assert G.is_isomorphic_with(expected)
