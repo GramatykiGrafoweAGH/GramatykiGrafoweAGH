@@ -215,7 +215,7 @@ class IProduction(ABC):
         raise CannotApplyProductionError()
 
     @final
-    def apply(self, G: Graph) -> List[Node]:
+    def apply_wherever_possible(self, G: Graph) -> List[Node]:
         for root in self.get_possible_roots(G):
             if self.check_root(G, root):
                 lhs = self.match_lhs(G, root)
@@ -228,7 +228,7 @@ class IProduction(ABC):
         if root is not None:
             return self.apply_for_root(G, root)
         else:
-            return self.apply(G)
+            return self.apply_wherever_possible(G)
 
 
 def apply_first_possible_production_for_root(G: Graph, productions: List[IProduction], root: Node) -> Tuple[IProduction, List[Node]]:
