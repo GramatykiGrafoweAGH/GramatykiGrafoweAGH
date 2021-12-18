@@ -12,18 +12,29 @@ if __name__ == '__main__':
 
     G.apply_productions([P1, P2])
 
+    G.assert_no_duplicated_nodes()
+
     G.apply_production(P2, times=4)
     G.apply_production_while_possible(P7)
     G.apply_production_while_possible(P8)
-    G.apply_production_while_possible(P9)
+
+    G.assert_no_duplicated_nodes()
 
     G.apply_production(P2, times=16)
     G.apply_production_while_possible(P7)
     G.apply_production_while_possible(P8)
     G.apply_production_while_possible(P9)
 
+    G.assert_no_duplicated_nodes()
+
+    G.apply_production(P2, times=64)
+    G.apply_production_while_possible(P7)
+    G.apply_production_while_possible(P8)
+    G.apply_production_while_possible(P9)
+
+    G.assert_no_duplicated_nodes()
+
     end = time()
     print(end - start)
 
-    G.assert_no_duplicated_nodes()
     G.show()
