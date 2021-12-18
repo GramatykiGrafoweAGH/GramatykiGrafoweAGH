@@ -1,9 +1,10 @@
+from math import dist
 from typing import Dict, List, Optional, Tuple
 
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from GramatykiGrafoweAGH import Node, Graph
+from GramatykiGrafoweAGH import Node, Graph, IProduction
 
 node_colors = {
     0: {
@@ -43,15 +44,24 @@ def get_node_labels(G: nx.Graph) -> Dict[int, str]:
     }
 
 
+def get_node_position(node: Node) -> Tuple[float, float]:
+    return node.x, node.y - node.level * 1.5
+
+
 def calculate_layout(G: nx.Graph) -> Dict[int, Tuple[float, float]]:
     return {
-        node: (node.x, node.y - node.level * 1.5)
+        node: get_node_position(node)
         for node in G.nodes
     }
 
 
-def draw_graph(G: Graph, *, level: Optional[int] = None) -> plt.Figure:
-    fig, ax = plt.subplots()
+def draw_graph(G: Graph, *, ax: Optional[plt.Axes] = None, level: Optional[int] = None) -> plt.Figure:
+    if ax is None:
+        fig, ax = plt.subplots()
+        fig.tight_layout()
+    else:
+        fig = None
+
     ax.set_aspect('equal', adjustable='datalim')
     ax.set(xlabel='$x$', ylabel='$y$')
 
@@ -70,3 +80,52 @@ def draw_graph(G: Graph, *, level: Optional[int] = None) -> plt.Figure:
 def show_graph(G: Graph, **kwargs):
     draw_graph(G, **kwargs)
     plt.show()
+
+
+class InteractiveVisualizer:
+    def __init__(self, G: Graph, productions: List[IProduction]):
+        self.G = G
+        self.productions = productions
+        self.fig, self.ax = plt.subplots()
+        self.fig.tight_layout()
+        self.fig.canvas.mpl_connect('button_press_event', self._handle_click)
+        self._reset_limits()
+
+    def _reset_limits(self) -> None:
+        x, y = 0.5, -0.5
+        dx = dy = 3
+        self.ax.set(xlim=(x - dx, x + dx), ylim=(y - dy, y + dy))
+
+    def _handle_click(self, event) -> None:
+        if not event.dblclick or not self.G.nodes:
+            return
+
+        event_xy = event.xdata, event.ydata
+
+        def distance(node: Node) -> float:
+            return dist(event_xy, get_node_position(node))
+
+        root = min(self.G.nodes, key=distance)
+
+        for production in self.productions:
+            lhs = production.match_lhs(self.G, root)
+            if lhs is not None:
+                production.apply(self.G, lhs)
+                print(type(production).__name__)
+                self._draw()
+                break
+        else:
+            print('Cannot apply any production for selected node')
+
+    def _draw(self) -> None:
+        old_xlim = plt.xlim()
+        old_ylim = plt.ylim()
+        self.ax.clear()
+        draw_graph(self.G, ax=self.ax)
+        self.ax.set(xlim=old_xlim, ylim=old_ylim)
+        print(f'{self.G.count_duplicates()} duplicated nodes')
+        plt.draw()
+
+    def show(self) -> None:
+        self._draw()
+        plt.show()

@@ -2,6 +2,8 @@
 
 Gramatyka grafowa do rekurencyjnej adaptacji siatek czworokątnych
 
+![](screenshot.png)
+
 ### Setup
 
 ```
@@ -21,8 +23,7 @@ $ source .venv/bin/activate
 ### Test
 
 ```
-(.venv) $ pip install pytest
-(.venv) $ python3 -m pytest
+(.venv) $ pytest
 ```
 
 ### Run

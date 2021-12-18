@@ -1,9 +1,10 @@
 from __future__ import annotations
 
+from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, field
 from itertools import count
-from typing import List, Iterable, Tuple, Callable
+from typing import Callable, Iterable, List, Optional, Tuple
 
 import networkx as nx
 from networkx.classes.reportviews import NodeView
@@ -46,6 +47,10 @@ class NodePositions:
 
     def count_duplicates(self) -> int:
         return sum(1 for group in self._dict.values() if len(group) >= 2)
+
+
+def node_key(node: Node) -> Tuple[int, int]:
+    return node.level, node.id
 
 
 def node_match(a: dict, b: dict) -> bool:
@@ -126,11 +131,17 @@ class Graph:
     def get_neighbors(self, node: Node):
         return self._G.neighbors(node)
 
+    def get_nodes_with_label(self, label: str) -> List[Node]:
+        return [node for node in self.nodes if node.label == label]
+
     def get_first_node_with_label(self, label: str) -> Node:
-        found = [node for node in self.nodes if node.label == label]
+        found = self.get_nodes_with_label(label)
         if not found:
             raise NodeNotFoundError(f'Node with label "{label}" not found')
-        return min(found, key=lambda node: (node.level, node.id))
+        return min(found, key=node_key)
+
+    def get_sorted_nodes_with_label(self, label: str) -> Iterable[Node]:
+        return sorted(self.get_nodes_with_label(label), key=node_key)
 
     def get_neighbors_with_label(self, node: Node, label: str) -> List[Node]:
         return [n for n in self.get_neighbors(node) if n.label == label]
@@ -176,3 +187,24 @@ class Graph:
     def show(self):
         from GramatykiGrafoweAGH.visualization import show_graph
         show_graph(self)
+
+
+class IProduction(ABC):
+    @abstractmethod
+    def get_possible_roots(self, G: Graph) -> Iterable[Node]:
+        pass
+
+    @abstractmethod
+    def match_lhs(self, G: Graph, root: Node) -> Optional[List[Node]]:
+        pass
+
+    @abstractmethod
+    def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
+        pass
+
+    def __call__(self, G: Graph) -> List[Node]:
+        for root in self.get_possible_roots(G):
+            lhs = self.match_lhs(G, root)
+            if lhs is not None:
+                return self.apply(G, lhs)
+        raise CannotApplyProductionError()

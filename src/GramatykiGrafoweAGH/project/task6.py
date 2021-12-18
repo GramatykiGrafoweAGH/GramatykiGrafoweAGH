@@ -1,13 +1,21 @@
+from collections import Iterable
 from itertools import combinations
+from typing import Optional, List
 
-from GramatykiGrafoweAGH import Graph
-from GramatykiGrafoweAGH.exceptions import CannotApplyProductionError
+from GramatykiGrafoweAGH import Graph, IProduction, Node
 from GramatykiGrafoweAGH.project.utils import is_node_between
 
 
-def P9(G: Graph) -> None:
-    for E2s in G.get_duplicates_with_label('E'):
-        for E2L, E2R in combinations(E2s, 2):
+class Production9(IProduction):
+    def get_possible_roots(self, G: Graph) -> Iterable[Node]:
+        for group in G.get_duplicates_with_label('E'):
+            yield group[0]
+
+    def match_lhs(self, G: Graph, E2L: Node) -> Optional[List[Node]]:
+        if E2L.label != 'E':
+            return None
+
+        for E2R in G.get_duplicates_of(E2L):
             E13s = G.get_common_neighbors_with_label(E2L, E2R, 'E')
             for E1, E3 in combinations(E13s, 2):
                 if is_node_between(E1, E2L, E3) and is_node_between(E1, E2R, E3):
@@ -18,7 +26,12 @@ def P9(G: Graph) -> None:
                                     for I23R in G.get_common_neighbors_with_label(E2R, E3, 'I'):
                                         for iR in G.get_common_neighbors_with_label(I12R, I23R, 'i'):
                                             for E in G.get_common_neighbors_with_label(iL, iR, 'E'):
-                                                G.merge_two_nodes(E2L, E2R)
-                                                return
+                                                return [E2L, E2R]
 
-    raise CannotApplyProductionError()
+    def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
+        E2L, E2R = lhs
+        E2 = G.merge_two_nodes(E2L, E2R)
+        return [E2]
+
+
+P9 = Production9()
