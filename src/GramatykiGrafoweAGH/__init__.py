@@ -195,22 +195,38 @@ class IProduction(ABC):
         pass
 
     @abstractmethod
+    def check_root(self, G: Graph, root: Node) -> bool:
+        pass
+
+    @abstractmethod
     def match_lhs(self, G: Graph, root: Node) -> Optional[List[Node]]:
         pass
 
     @abstractmethod
-    def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
+    def apply_for_lhs(self, G: Graph, lhs: List[Node]) -> List[Node]:
         pass
 
-    def __call__(self, G: Graph, root: Optional[Node] = None) -> List[Node]:
-        if root is None:
-            for root in self.get_possible_roots(G):
+    def __call__(self, G: Graph) -> List[Node]:
+        for root in self.get_possible_roots(G):
+            if self.check_root(G, root):
                 lhs = self.match_lhs(G, root)
                 if lhs is not None:
-                    return self.apply(G, lhs)
-            raise CannotApplyProductionError()
-        else:
+                    return self.apply_for_lhs(G, lhs)
+        raise CannotApplyProductionError()
+
+    def apply_for_root(self, G: Graph, root: Node) -> List[Node]:
+        if self.check_root(G, root):
             lhs = self.match_lhs(G, root)
-            if lhs is None:
-                raise CannotApplyProductionError()
-            return self.apply(G, lhs)
+            if lhs is not None:
+                return self.apply_for_lhs(G, lhs)
+        raise CannotApplyProductionError()
+
+
+def apply_first_possible_production_for_root(G: Graph, productions: List[IProduction], root: Node) -> Tuple[IProduction, List[Node]]:
+    for production in productions:
+        if production.check_root(G, root):
+            lhs = production.match_lhs(G, root)
+            if lhs is not None:
+                result = production.apply_for_lhs(G, lhs)
+                return production, result
+    raise CannotApplyProductionError()

@@ -4,7 +4,8 @@ from typing import Dict, List, Optional, Tuple
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from GramatykiGrafoweAGH import Node, Graph, IProduction
+from GramatykiGrafoweAGH import CannotApplyProductionError, Graph, IProduction, Node, \
+    apply_first_possible_production_for_root
 
 node_colors = {
     0: {
@@ -107,14 +108,11 @@ class InteractiveVisualizer:
 
         root = min(self.G.nodes, key=distance)
 
-        for production in self.productions:
-            lhs = production.match_lhs(self.G, root)
-            if lhs is not None:
-                production.apply(self.G, lhs)
-                print(type(production).__name__)
-                self._draw()
-                break
-        else:
+        try:
+            production, _ = apply_first_possible_production_for_root(self.G, self.productions, root)
+            print(type(production).__name__)
+            self._draw()
+        except CannotApplyProductionError:
             print('Cannot apply any production for selected node')
 
     def _draw(self) -> None:

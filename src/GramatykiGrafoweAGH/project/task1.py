@@ -1,4 +1,4 @@
-from typing import Optional, List, Iterable
+from typing import Iterable, List, Optional
 
 from GramatykiGrafoweAGH import Node, Graph, IProduction
 from GramatykiGrafoweAGH.exceptions import SquareNotFoundError
@@ -16,11 +16,13 @@ class Production1(IProduction):
     def get_possible_roots(self, G: Graph) -> Iterable[Node]:
         return G.get_sorted_nodes_with_label('E')
 
-    def match_lhs(self, G: Graph, E: Node) -> Optional[List[Node]]:
-        if E.label == 'E':
-            return [E]
+    def check_root(self, G: Graph, root: Node) -> bool:
+        return root.label == 'E'
 
-    def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
+    def match_lhs(self, G: Graph, E: Node) -> Optional[List[Node]]:
+        return [E]
+
+    def apply_for_lhs(self, G: Graph, lhs: List[Node]) -> List[Node]:
         E, = lhs
 
         x0 = E.x
@@ -56,10 +58,10 @@ class Production2(IProduction):
     def get_possible_roots(self, G: Graph) -> Iterable[Node]:
         return G.get_sorted_nodes_with_label('I')
 
-    def match_lhs(self, G: Graph, I: Node) -> Optional[List[Node]]:
-        if I.label != 'I':
-            return None
+    def check_root(self, G: Graph, root: Node) -> bool:
+        return root.label == 'I'
 
+    def match_lhs(self, G: Graph, I: Node) -> Optional[List[Node]]:
         try:
             E1, E2, E3, E4 = get_square_vertices(G, I)
         except SquareNotFoundError:
@@ -67,7 +69,7 @@ class Production2(IProduction):
 
         return [I, E1, E2, E3, E4]
 
-    def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
+    def apply_for_lhs(self, G: Graph, lhs: List[Node]) -> List[Node]:
         I, E1, E2, E3, E4 = lhs
 
         level = I.level

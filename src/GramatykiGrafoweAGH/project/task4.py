@@ -1,5 +1,5 @@
 from itertools import combinations
-from typing import Optional, Iterable, List
+from typing import Iterable, List, Optional
 
 from GramatykiGrafoweAGH import Graph, IProduction, Node
 from GramatykiGrafoweAGH.project.utils import is_node_between
@@ -10,10 +10,10 @@ class Production7(IProduction):
         for group in G.get_duplicates_with_label('E'):
             yield group[0]
 
-    def match_lhs(self, G: Graph, E2L: Node) -> Optional[List[Node]]:
-        if E2L.label != 'E':
-            return None
+    def check_root(self, G: Graph, root: Node) -> bool:
+        return root.label == 'E'
 
+    def match_lhs(self, G: Graph, E2L: Node) -> Optional[List[Node]]:
         for E2R in G.get_duplicates_of(E2L):
             E13Ls = G.get_neighbors_with_label(E2L, 'E')
             for E1L, E3L in combinations(E13Ls, 2):
@@ -30,7 +30,7 @@ class Production7(IProduction):
                                                         for E in G.get_common_neighbors_with_label(iL, iR, 'E'):
                                                             return [E1L, E2L, E3L, E1R, E2R, E3R]
 
-    def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
+    def apply_for_lhs(self, G: Graph, lhs: List[Node]) -> List[Node]:
         E1L, E2L, E3L, E1R, E2R, E3R = lhs
         E1 = G.merge_two_nodes(E1L, E1R)
         E2 = G.merge_two_nodes(E2L, E2R)
