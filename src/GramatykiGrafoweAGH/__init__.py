@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from collections import defaultdict
 from dataclasses import dataclass, field
 from itertools import count
-from typing import Callable, Iterable, List, Optional, Tuple
+from typing import Callable, Iterable, List, Optional, Tuple, final
 
 import networkx as nx
 from networkx.classes.reportviews import NodeView
@@ -206,7 +206,16 @@ class IProduction(ABC):
     def apply_for_lhs(self, G: Graph, lhs: List[Node]) -> List[Node]:
         pass
 
-    def __call__(self, G: Graph) -> List[Node]:
+    @final
+    def apply_for_root(self, G: Graph, root: Node) -> List[Node]:
+        if self.check_root(G, root):
+            lhs = self.match_lhs(G, root)
+            if lhs is not None:
+                return self.apply_for_lhs(G, lhs)
+        raise CannotApplyProductionError()
+
+    @final
+    def apply(self, G: Graph) -> List[Node]:
         for root in self.get_possible_roots(G):
             if self.check_root(G, root):
                 lhs = self.match_lhs(G, root)
@@ -214,12 +223,12 @@ class IProduction(ABC):
                     return self.apply_for_lhs(G, lhs)
         raise CannotApplyProductionError()
 
-    def apply_for_root(self, G: Graph, root: Node) -> List[Node]:
-        if self.check_root(G, root):
-            lhs = self.match_lhs(G, root)
-            if lhs is not None:
-                return self.apply_for_lhs(G, lhs)
-        raise CannotApplyProductionError()
+    @final
+    def __call__(self, G: Graph, *, root: Optional[Node] = None) -> List[Node]:
+        if root is not None:
+            return self.apply_for_root(G, root)
+        else:
+            return self.apply(G)
 
 
 def apply_first_possible_production_for_root(G: Graph, productions: List[IProduction], root: Node) -> Tuple[IProduction, List[Node]]:
