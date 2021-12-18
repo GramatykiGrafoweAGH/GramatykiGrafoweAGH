@@ -1,7 +1,7 @@
 from typing import Optional, List, Iterable
 
 from GramatykiGrafoweAGH import Node, Graph, IProduction
-from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, SquareNotFoundError
+from GramatykiGrafoweAGH.exceptions import SquareNotFoundError
 from GramatykiGrafoweAGH.project.utils import get_square_vertices
 
 
