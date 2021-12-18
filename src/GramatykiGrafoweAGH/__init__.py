@@ -202,9 +202,15 @@ class IProduction(ABC):
     def apply(self, G: Graph, lhs: List[Node]) -> List[Node]:
         pass
 
-    def __call__(self, G: Graph) -> List[Node]:
-        for root in self.get_possible_roots(G):
+    def __call__(self, G: Graph, root: Optional[Node] = None) -> List[Node]:
+        if root is None:
+            for root in self.get_possible_roots(G):
+                lhs = self.match_lhs(G, root)
+                if lhs is not None:
+                    return self.apply(G, lhs)
+            raise CannotApplyProductionError()
+        else:
             lhs = self.match_lhs(G, root)
-            if lhs is not None:
-                return self.apply(G, lhs)
-        raise CannotApplyProductionError()
+            if lhs is None:
+                raise CannotApplyProductionError()
+            return self.apply(G, lhs)
