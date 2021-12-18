@@ -49,7 +49,7 @@ class NodePositions:
         return sum(1 for group in self._dict.values() if len(group) >= 2)
 
 
-def node_key(node: Node) -> Tuple[int, int]:
+def get_node_sort_key(node: Node) -> Tuple[int, int]:
     return node.level, node.id
 
 
@@ -138,10 +138,10 @@ class Graph:
         found = self.get_nodes_with_label(label)
         if not found:
             raise NodeNotFoundError(f'Node with label "{label}" not found')
-        return min(found, key=node_key)
+        return min(found, key=get_node_sort_key)
 
     def get_sorted_nodes_with_label(self, label: str) -> Iterable[Node]:
-        return sorted(self.get_nodes_with_label(label), key=node_key)
+        return sorted(self.get_nodes_with_label(label), key=get_node_sort_key)
 
     def get_neighbors_with_label(self, node: Node, label: str) -> List[Node]:
         return [n for n in self.get_neighbors(node) if n.label == label]
