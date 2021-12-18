@@ -123,8 +123,8 @@ class InteractiveVisualizer:
         self.ax.clear()
         draw_graph(self.G, ax=self.ax)
         self.ax.set(xlim=old_xlim, ylim=old_ylim)
-        print(f'{self.G.count_duplicates()} duplicated nodes')
         plt.draw()
+        plt.suptitle(f'{self.G.count_duplicates()} duplicated nodes')
 
     def show(self) -> None:
         self._draw()
