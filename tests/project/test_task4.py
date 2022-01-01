@@ -95,36 +95,71 @@ def test_P7_can_be_applied_only_once():
     assert_production_cannot_be_applied(P7, G)
 
 
-@pytest.mark.skip(reason='not implemented yet')
 def test_P7_removed_edge():
-    # create graph that perfectly fits p7 definition
-    # remove random edge (propbably we should test removing from different levels)
-    # try to apply p7 once
-    # exception should be thrown
-    pass
+    G = make_P7_left_side_graph()
+
+    I = G.get_first_node_with_label('I')
+    G.remove_edge(I, list(G.get_neighbors(I))[0])
+
+    assert_production_cannot_be_applied(P7, G)
 
 
-@pytest.mark.skip(reason='not implemented yet')
 def test_P7_removed_node():
-    # create graph that perfectly fits p7 definition
-    # remove random node (probably we should test removing from different levels)
-    # try to apply p7 once
-    # exception should be thrown
-    pass
+    G = make_P7_left_side_graph()
+
+    I = G.get_first_node_with_label('I')
+    G.remove_node(I)
+
+    assert_production_cannot_be_applied(P7, G)
 
 
-@pytest.mark.skip(reason='not implemented yet')
 def test_P7_different_label():
-    # create graph that perfectly fits p7 definition
-    # change random label to different one (probably we should test on different levels)
-    # try to apply p7 once
-    # exception should be thrown
-    pass
+    G = make_P7_left_side_graph()
+
+    I = G.get_first_node_with_label('I')
+    G.replace_node(I, Node(label='e', x=I.x, y=I.y, level=I.level))
+
+    assert_production_cannot_be_applied(P7, G)
 
 
-@pytest.mark.skip(reason='not implemented yet')
 def test_P7_on_P8_graph():
-    # create graph that perfectly fits p8 definition
-    # try to apply p7 once
-    # exception should be thrown
-    pass
+    G = make_P7_left_side_graph()
+
+    E1L, E1R = list(filter(lambda n: n.label == "E" and n.x == 0 and n.level == 3, G.nodes))
+    G.merge_two_nodes(E1L, E1R)
+
+    assert_production_cannot_be_applied(P7, G)
+
+
+def test_P7_left_side_subgraph():
+    # test application of P7 to the graph with the subgraph isomorphic to left side of P7
+    G = make_P7_left_side_graph()
+    expected = make_P7_right_side_graph()
+
+    def add_node(G: Graph) -> None:
+        E = G.get_first_node_with_label('E')
+        E1 = Node(label='E', x=-1, y=-1, level=2)
+        G.add_node(E1)
+        G.add_edge(E, E1)
+
+    add_node(G)
+    add_node(expected)
+
+    P7(G)
+
+    assert G.is_isomorphic_with(expected)
+
+
+def test_P7_left_side_invariance():
+    # test invariance of the left side graph when production cannot be applied
+    G = make_P7_left_side_graph()
+    expected = make_P7_left_side_graph()
+
+    I = G.get_first_node_with_label('I')
+    G.remove_node(I)
+
+    I = expected.get_first_node_with_label('I')
+    expected.remove_node(I)
+
+    assert_production_cannot_be_applied(P7, G)
+    assert G.is_isomorphic_with(expected)
