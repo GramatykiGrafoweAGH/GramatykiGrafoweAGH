@@ -1,21 +1,98 @@
 import pytest
 
+from GramatykiGrafoweAGH import Graph, Node
+from GramatykiGrafoweAGH.project.task4 import P7
+from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
 
-@pytest.mark.skip(reason='not implemented yet')
+
+def make_P7_left_side_graph():
+    G = Graph()
+
+    level = 2
+
+    E = Node(label='E', x=0, y=0, level=level)
+    iL = Node(label='i', x=0, y=0, level=level)
+    iR = Node(label='i', x=0, y=0, level=level)
+
+    I1L = Node(label='I', x=0, y=0, level=level + 1)
+    I2L = Node(label='I', x=0, y=0, level=level + 1)
+
+    I1R = Node(label='I', x=0, y=0, level=level + 1)
+    I2R = Node(label='I', x=0, y=0, level=level + 1)
+
+    E1L = Node(label='E', x=0, y=0, level=level + 1)
+    E2L = Node(label='E', x=1, y=1, level=level + 1)
+    E3L = Node(label='E', x=2, y=2, level=level + 1)
+
+    E1R = Node(label='E', x=0, y=0, level=level + 1)
+    E2R = Node(label='E', x=1, y=1, level=level + 1)
+    E3R = Node(label='E', x=2, y=2, level=level + 1)
+
+    G.add_nodes([E, iL, iR, I1L, I2L, I1R, I2R, E1L, E2L, E3L, E1R, E2R, E3R])
+
+    G.add_edges([
+        (E, iL), (E, iR), (iL, I1L), (iL, I2L), (iR, I1R), (iR, I2R),
+        (I1L, E1L), (I1L, E2L), (I2L, E2L), (I2L, E3L),
+        (I1R, E1R), (I1R, E2R), (I2R, E2R), (I2R, E3R),
+        (E1L, E2L), (E2L, E3L), (E1R, E2R), (E2R, E3R)
+    ])
+
+    return G
+
+
+def make_P7_right_side_graph():
+    G = Graph()
+
+    level = 2
+
+    E = Node(label='E', x=0, y=0, level=level)
+    iL = Node(label='i', x=0, y=0, level=level)
+    iR = Node(label='i', x=0, y=0, level=level)
+
+    I1L = Node(label='I', x=0, y=0, level=level + 1)
+    I2L = Node(label='I', x=0, y=0, level=level + 1)
+
+    I1R = Node(label='I', x=0, y=0, level=level + 1)
+    I2R = Node(label='I', x=0, y=0, level=level + 1)
+
+    E1 = Node(label='E', x=0, y=0, level=level + 1)
+    E2 = Node(label='E', x=1, y=1, level=level + 1)
+    E3 = Node(label='E', x=2, y=2, level=level + 1)
+
+    G.add_nodes([E, iL, iR, I1L, I2L, I1R, I2R, E1, E2, E3])
+
+    G.add_edges([
+        (E, iL), (E, iR), (iL, I1L), (iL, I2L), (iR, I1R), (iR, I2R),
+        (I1L, E1), (I1L, E2), (I2L, E2), (I2L, E3),
+        (I1R, E1), (I1R, E2), (I2R, E2), (I2R, E3),
+        (E1, E2), (E2, E3)
+    ])
+
+    return G
+
+
 def test_P7_isomorphic():
-    # create graph that perfectly fits p7 definition
-    # try to apply p7 once
-    # check if applied (isomorphic?)
-    pass
+    G = make_P7_left_side_graph()
+
+    P7(G)
+
+    assert len(G.nodes) == 10
+
+    assert G.number_of_edges == 16
+
+    Es = list(filter(lambda n: n.level == 3 and n.label == 'E', G.nodes))
+
+    assert len(Es) == 3
+
+    G.is_isomorphic_with(make_P7_right_side_graph())
 
 
-@pytest.mark.skip(reason='not implemented yet')
 def test_P7_can_be_applied_only_once():
-    # create graph that perfectly fits p7 definition
-    # try to apply p7 once
-    # try to apply once more
-    # exception should be thrown
-    pass
+    G = make_P7_left_side_graph()
+
+    P7(G)
+
+    assert_production_cannot_be_applied(P7, G)
 
 
 @pytest.mark.skip(reason='not implemented yet')
@@ -40,6 +117,14 @@ def test_P7_removed_node():
 def test_P7_different_label():
     # create graph that perfectly fits p7 definition
     # change random label to different one (probably we should test on different levels)
+    # try to apply p7 once
+    # exception should be thrown
+    pass
+
+
+@pytest.mark.skip(reason='not implemented yet')
+def test_P7_on_P8_graph():
+    # create graph that perfectly fits p8 definition
     # try to apply p7 once
     # exception should be thrown
     pass
