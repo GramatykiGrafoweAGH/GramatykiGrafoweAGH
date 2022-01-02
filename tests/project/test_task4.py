@@ -1,5 +1,3 @@
-import pytest
-
 from GramatykiGrafoweAGH import Graph, Node
 from GramatykiGrafoweAGH.project.task4 import P7
 from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
