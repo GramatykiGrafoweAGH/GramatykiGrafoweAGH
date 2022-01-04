@@ -13,12 +13,12 @@ def get_square_vertices(G: Graph, I: Node) -> Tuple[Node, Node, Node, Node]:
     if len(Es) != 4:
         raise SquareNotFoundError()
 
-    E1 = min(Es, key=lambda node: (node.x, node.y))
-    Es.remove(E1)
-    E2 = next(node for node in Es if node in G.get_neighbors(E1) and node.x > E1.x)
+    E3 = min(Es, key=lambda node: (node.x, node.y))
+    Es.remove(E3)
+    E2 = max(Es, key=lambda node: (node.x, node.y))
     Es.remove(E2)
-    E4 = next(node for node in Es if node in G.get_neighbors(E2))
+    E4 = max(Es, key=lambda node: node.x)
     Es.remove(E4)
-    E3, = Es
+    E1, = Es
 
     return E1, E2, E3, E4
