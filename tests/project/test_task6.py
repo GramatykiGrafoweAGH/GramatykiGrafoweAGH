@@ -3,6 +3,7 @@ from GramatykiGrafoweAGH.project.task6 import P9
 from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
 from test_task4 import make_P7_left_side_graph
 
+
 def make_P9_left_side_graph():
     G = Graph()
 
@@ -20,9 +21,9 @@ def make_P9_left_side_graph():
 
     E1 = Node(label='E', x=0, y=0, level=level + 1)
     E3 = Node(label='E', x=2, y=2, level=level + 1)
-    
+
     E2L = Node(label='E', x=1, y=1, level=level + 1)
-    
+
     E2R = Node(label='E', x=1, y=1, level=level + 1)
 
     G.add_nodes([E, iL, iR, I1L, I2L, I1R, I2R, E1, E2L, E2R, E3])
@@ -35,6 +36,7 @@ def make_P9_left_side_graph():
     ])
 
     return G
+
 
 def make_P9_right_side_graph():
     G = Graph()

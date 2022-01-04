@@ -2,6 +2,7 @@ from GramatykiGrafoweAGH import Graph, Node
 from GramatykiGrafoweAGH.project.task5 import P8
 from GramatykiGrafoweAGH.testing import assert_production_cannot_be_applied
 
+
 def make_P8_left_side_graph():
     G = Graph()
 
@@ -18,7 +19,7 @@ def make_P8_left_side_graph():
     I2R = Node(label='I', x=0, y=0, level=level + 1)
 
     E1 = Node(label='E', x=0, y=0, level=level + 1)
-    
+
     E2L = Node(label='E', x=1, y=1, level=level + 1)
     E3L = Node(label='E', x=2, y=2, level=level + 1)
 
@@ -35,6 +36,7 @@ def make_P8_left_side_graph():
     ])
 
     return G
+
 
 def make_P8_right_side_graph():
     G = Graph()
