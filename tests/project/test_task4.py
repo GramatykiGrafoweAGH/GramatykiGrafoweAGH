@@ -69,7 +69,7 @@ def make_P7_right_side_graph():
     return G
 
 
-def test_P7_isomorphic():
+def test_P7_isomorphic_left_side():
     G = make_P7_left_side_graph()
 
     P7(G)
@@ -93,16 +93,7 @@ def test_P7_can_be_applied_only_once():
     assert_production_cannot_be_applied(P7, G)
 
 
-def test_P7_removed_edge():
-    G = make_P7_left_side_graph()
-
-    I = G.get_first_node_with_label('I')
-    G.remove_edge(I, list(G.get_neighbors(I))[0])
-
-    assert_production_cannot_be_applied(P7, G)
-
-
-def test_P7_removed_node():
+def test_P7_left_side_deleted_node():
     G = make_P7_left_side_graph()
 
     I = G.get_first_node_with_label('I')
@@ -111,20 +102,20 @@ def test_P7_removed_node():
     assert_production_cannot_be_applied(P7, G)
 
 
-def test_P7_different_label():
+def test_P7_left_side_deleted_edge():
     G = make_P7_left_side_graph()
 
     I = G.get_first_node_with_label('I')
-    G.replace_node(I, Node(label='e', x=I.x, y=I.y, level=I.level))
+    G.remove_edge(I, list(G.get_neighbors(I))[0])
 
     assert_production_cannot_be_applied(P7, G)
 
 
-def test_P7_on_P8_graph():
+def test_P7_left_side_wrong_label():
     G = make_P7_left_side_graph()
 
-    E1L, E1R = list(filter(lambda n: n.label == "E" and n.x == 0 and n.level == 3, G.nodes))
-    G.merge_two_nodes(E1L, E1R)
+    I = G.get_first_node_with_label('I')
+    G.replace_node(I, Node(label='e', x=I.x, y=I.y, level=I.level))
 
     assert_production_cannot_be_applied(P7, G)
 
@@ -161,3 +152,12 @@ def test_P7_left_side_invariance():
 
     assert_production_cannot_be_applied(P7, G)
     assert G.is_isomorphic_with(expected)
+
+
+def test_P7_on_P8_graph():
+    G = make_P7_left_side_graph()
+
+    E1L, E1R = list(filter(lambda n: n.label == "E" and n.x == 0 and n.level == 3, G.nodes))
+    G.merge_two_nodes(E1L, E1R)
+
+    assert_production_cannot_be_applied(P7, G)

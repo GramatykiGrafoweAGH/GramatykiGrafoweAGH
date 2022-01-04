@@ -66,7 +66,8 @@ def make_P8_right_side_graph():
 
     return G
 
-def test_P8_isomorphic():
+
+def test_P8_isomorphic_left_side():
     G = make_P8_left_side_graph()
 
     P8(G)
@@ -81,6 +82,7 @@ def test_P8_isomorphic():
 
     G.is_isomorphic_with(make_P8_right_side_graph())
 
+
 def test_P8_can_be_applied_only_once():
     G = make_P8_left_side_graph()
 
@@ -88,15 +90,8 @@ def test_P8_can_be_applied_only_once():
 
     assert_production_cannot_be_applied(P8, G)
 
-def test_P8_removed_edge():
-    G = make_P8_left_side_graph()
 
-    I = G.get_first_node_with_label('I')
-    G.remove_edge(I, list(G.get_neighbors(I))[0])
-
-    assert_production_cannot_be_applied(P8, G)
-
-def test_P7_removed_node():
+def test_P7_left_side_deleted_node():
     G = make_P8_left_side_graph()
 
     I = G.get_first_node_with_label('I')
@@ -104,7 +99,17 @@ def test_P7_removed_node():
 
     assert_production_cannot_be_applied(P8, G)
 
-def test_P7_different_label():
+
+def test_P8_left_side_deleted_edge():
+    G = make_P8_left_side_graph()
+
+    I = G.get_first_node_with_label('I')
+    G.remove_edge(I, list(G.get_neighbors(I))[0])
+
+    assert_production_cannot_be_applied(P8, G)
+
+
+def test_P7_left_side_wrong_label():
     G = make_P8_left_side_graph()
 
     I = G.get_first_node_with_label('I')
@@ -112,13 +117,6 @@ def test_P7_different_label():
 
     assert_production_cannot_be_applied(P8, G)
 
-def test_P8_on_P9_graph():
-    G = make_P8_left_side_graph()
-
-    E3L, E3R = list(filter(lambda n: n.label == "E" and n.x == 2 and n.level == 3, G.nodes))
-    G.merge_two_nodes(E3L, E3R)
-
-    assert_production_cannot_be_applied(P8, G)
 
 def test_P8_left_side_subgraph():
     # test application of P8 to the graph with the subgraph isomorphic to left side of P8
@@ -138,6 +136,7 @@ def test_P8_left_side_subgraph():
 
     assert G.is_isomorphic_with(expected)
 
+
 def test_P8_left_side_invariance():
     # test invariance of the left side graph when production cannot be applied
     G = make_P8_left_side_graph()
@@ -151,3 +150,12 @@ def test_P8_left_side_invariance():
 
     assert_production_cannot_be_applied(P8, G)
     assert G.is_isomorphic_with(expected)
+
+
+def test_P8_on_P9_graph():
+    G = make_P8_left_side_graph()
+
+    E3L, E3R = list(filter(lambda n: n.label == "E" and n.x == 2 and n.level == 3, G.nodes))
+    G.merge_two_nodes(E3L, E3R)
+
+    assert_production_cannot_be_applied(P8, G)
