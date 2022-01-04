@@ -91,7 +91,7 @@ def test_P8_can_be_applied_only_once():
     assert_production_cannot_be_applied(P8, G)
 
 
-def test_P7_left_side_deleted_node():
+def test_P8_left_side_deleted_node():
     G = make_P8_left_side_graph()
 
     I = G.get_first_node_with_label('I')
@@ -109,7 +109,7 @@ def test_P8_left_side_deleted_edge():
     assert_production_cannot_be_applied(P8, G)
 
 
-def test_P7_left_side_wrong_label():
+def test_P8_left_side_wrong_label():
     G = make_P8_left_side_graph()
 
     I = G.get_first_node_with_label('I')
