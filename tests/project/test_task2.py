@@ -7,20 +7,20 @@ def make_initial_graph_P3() -> Graph:
     G = Graph()
 
     I = Node(label='I', x=0, y=0, level=1)
-    E1 = Node(label='E', x=-.5, y=.5, level=1)
-    E2 = Node(label='E', x=.5, y=.5, level=1)
-    E3 = Node(label='E', x=-.5, y=-.5, level=1)
-    E4 = Node(label='E', x=.5, y=-.5, level=1)
-    E13 = Node(label='E', x=-.5, y=0, level=1)
+    E00 = Node(label='E', x=-.5, y=-.5, level=1)
+    E20 = Node(label='E', x=-.5, y=.5, level=1)
+    E02 = Node(label='E', x=.5, y=-.5, level=1)
+    E22 = Node(label='E', x=.5, y=.5, level=1)
+    E10 = Node(label='E', x=-.5, y=0, level=1)
 
-    G.add_nodes([I, E1, E2, E3, E4, E13])
+    G.add_nodes([I, E00, E02, E20, E22, E10])
 
     G.add_edges([
-        (I, E1), (I, E2), (I, E3), (I, E4),
-        (E1, E2),
-        (E2, E4),
-        (E1, E13), (E13, E3),
-        (E3, E4),
+        (I, E20), (I, E22), (I, E00), (I, E02),
+        (E00, E02),
+        (E00, E10), (E10, E20),
+        (E20, E22),
+        (E22, E02),
     ])
 
     return G
@@ -30,20 +30,21 @@ def make_initial_graph_P4() -> Graph:
     G = Graph()
 
     I = Node(label='I', x=0, y=0, level=1)
-    E1 = Node(label='E', x=-.5, y=.5, level=1)
-    E2 = Node(label='E', x=.5, y=.5, level=1)
-    E3 = Node(label='E', x=-.5, y=-.5, level=1)
-    E4 = Node(label='E', x=.5, y=-.5, level=1)
-    E12 = Node(label='E', x=0, y=.5, level=1)
-    E13 = Node(label='E', x=-.5, y=0, level=1)
+    E00 = Node(label='E', x=-.5, y=-.5, level=1)
+    E20 = Node(label='E', x=-.5, y=.5, level=1)
+    E02 = Node(label='E', x=.5, y=-.5, level=1)
+    E22 = Node(label='E', x=.5, y=.5, level=1)
+    E10 = Node(label='E', x=-.5, y=0, level=1)
+    E21 = Node(label='E', x=0, y=.5, level=1)
 
-    G.add_nodes([I, E1, E2, E3, E4, E12, E13])
+    G.add_nodes([I, E00, E02, E20, E22, E21, E10])
 
     G.add_edges([
-        (I, E1), (I, E2), (I, E3), (I, E4),
-        (E1, E12), (E1, E13),
-        (E2, E12), (E2, E4),
-        (E3, E13), (E3, E4),
+        (I, E00), (I, E02), (I, E20), (I, E22),
+        (E00, E02),
+        (E00, E10), (E10, E20),
+        (E02, E22),
+        (E20, E21), (E21, E22),
     ])
 
     return G
@@ -54,68 +55,70 @@ def make_right_side_graph_P3():
 
     level = 1
 
-    x0, y0 = 0, 0
-    x1, y1 = -0.5, -0.5
-    x2, y2 = 0.5, -0.5
-    x3, y3 = -0.5, 0.5
-    x4, y4 = 0.5, 0.5
-    x5, y5 = 0.0, -0.5
-    x6, y6 = -0.5, 0.0
-    x7, y7 = 0.5, 0.0
-    x8, y8 = 0.0, 0.5
-    x9, y9 = 0.0, 0.0
+    x00, y00 = -0.5, -0.5
+    x01, y01 = 0.0, -0.5
+    x02, y02 = 0.5, -0.5
+    x10, y10 = -0.5, 0.0
+    x11, y11 = 0.0, 0.0
+    x12, y12 = 0.5, 0.0
+    x20, y20 = -0.5, 0.5
+    x21, y21 = 0.0, 0.5
+    x22, y22 = 0.5, 0.5
 
-    x13, y13 = -0.5, 0
+    i = Node(label='i', x=x11, y=y11, level=level)
+    E00 = Node(label='E', x=x00, y=y00, level=level)
+    E02 = Node(label='E', x=x02, y=y02, level=level)
+    E20 = Node(label='E', x=x20, y=y20, level=level)
+    E22 = Node(label='E', x=x22, y=y22, level=level)
 
-    i = Node(label='i', x=x0, y=y0, level=level)
-    E1 = Node(label='E', x=x1, y=y1, level=level)
-    E2 = Node(label='E', x=x2, y=y2, level=level)
-    E3 = Node(label='E', x=x3, y=y3, level=level)
-    E4 = Node(label='E', x=x4, y=y4, level=level)
+    E10 = Node(label='E', x=x10, y=y10, level=level)
 
-    E13 = Node(label='E', x=x13, y=y13, level=level)
-
-    G.add_nodes([i, E1, E2, E3, E4, E13])
+    G.add_nodes([i, E00, E02, E20, E22, E10])
 
     G.add_edges([
-        (i, E1), (i, E2), (i, E3), (i, E4),
-        (E13, E1), (E13, E3),
-        (E3, E4),
-        (E2, E4),
-        (E1, E2),
+        (i, E00), (i, E02), (i, E20), (i, E22),
+        (E00, E02),
+        (E00, E10), (E10, E20),
+        (E02, E22),
+        (E20, E22),
     ])
 
-    I1 = Node(label='I', x=(x1 + x9) / 2, y=(y1 + y9) / 2, level=level + 1)
-    I2 = Node(label='I', x=(x2 + x9) / 2, y=(y2 + y9) / 2, level=level + 1)
-    I3 = Node(label='I', x=(x3 + x9) / 2, y=(y3 + y9) / 2, level=level + 1)
-    I4 = Node(label='I', x=(x4 + x9) / 2, y=(y4 + y9) / 2, level=level + 1)
+    I00 = Node(label='I', x=(x00 + x11) / 2, y=(y00 + y11) / 2, level=level + 1)
+    I01 = Node(label='I', x=(x02 + x11) / 2, y=(y02 + y11) / 2, level=level + 1)
+    I10 = Node(label='I', x=(x20 + x11) / 2, y=(y20 + y11) / 2, level=level + 1)
+    I11 = Node(label='I', x=(x22 + x11) / 2, y=(y22 + y11) / 2, level=level + 1)
 
-    E1 = Node(label='E', x=x1, y=y1, level=level + 1)
-    E2 = Node(label='E', x=x2, y=y2, level=level + 1)
-    E3 = Node(label='E', x=x3, y=y3, level=level + 1)
-    E4 = Node(label='E', x=x4, y=y4, level=level + 1)
-    E5 = Node(label='E', x=x5, y=y5, level=level + 1)
-    E6 = Node(label='E', x=x6, y=y6, level=level + 1)
-    E7 = Node(label='E', x=x7, y=y7, level=level + 1)
-    E8 = Node(label='E', x=x8, y=y8, level=level + 1)
-    E9 = Node(label='E', x=x9, y=y9, level=level + 1)
+    E00 = Node(label='E', x=x00, y=y00, level=level + 1)
+    E01 = Node(label='E', x=x01, y=y01, level=level + 1)
+    E02 = Node(label='E', x=x02, y=y02, level=level + 1)
+    E10 = Node(label='E', x=x10, y=y10, level=level + 1)
+    E11 = Node(label='E', x=x11, y=y11, level=level + 1)
+    E12 = Node(label='E', x=x12, y=y12, level=level + 1)
+    E20 = Node(label='E', x=x20, y=y20, level=level + 1)
+    E21 = Node(label='E', x=x21, y=y21, level=level + 1)
+    E22 = Node(label='E', x=x22, y=y22, level=level + 1)
 
     G.add_nodes([
-        I1, I2, I3, I4,
-        E1, E2, E3, E4, E5, E6, E7, E8, E9,
+        I00, I01, I10, I11,
+        E00, E01, E02,
+        E10, E11, E12,
+        E20, E21, E22,
     ])
 
     G.add_edges([
-        (i, I1), (i, I2), (i, I3), (i, I4),
-        (I1, E1), (I1, E5), (I1, E9), (I1, E6),
-        (I2, E5), (I2, E2), (I2, E7), (I2, E9),
-        (I3, E6), (I3, E9), (I3, E8), (I3, E3),
-        (I4, E9), (I4, E7), (I4, E4), (I4, E8),
-        (E1, E5), (E5, E2),
-        (E1, E6), (E5, E9), (E2, E7),
-        (E6, E9), (E9, E7),
-        (E6, E3), (E9, E8), (E7, E4),
-        (E3, E8), (E8, E4),
+        (i, I00), (i, I01), (i, I10), (i, I11),
+        (I00, E00), (I00, E01), (I00, E10), (I00, E11),
+        (I01, E01), (I01, E02), (I01, E11), (I01, E12),
+        (I10, E10), (I10, E11), (I10, E20), (I10, E21),
+        (I11, E11), (I11, E12), (I11, E21), (I11, E22),
+
+        (E00, E01), (E01, E02),
+        (E10, E11), (E11, E12),
+        (E20, E21), (E21, E22),
+
+        (E00, E10), (E10, E20),
+        (E01, E11), (E11, E21),
+        (E02, E12), (E12, E22),
     ])
 
     return G
@@ -126,70 +129,71 @@ def make_right_side_graph_P4():
 
     level = 1
 
-    x0, y0 = 0, 0
-    x1, y1 = -0.5, -0.5
-    x2, y2 = 0.5, -0.5
-    x3, y3 = -0.5, 0.5
-    x4, y4 = 0.5, 0.5
-    x5, y5 = 0.0, -0.5
-    x6, y6 = -0.5, 0.0
-    x7, y7 = 0.5, 0.0
-    x8, y8 = 0.0, 0.5
-    x9, y9 = 0.0, 0.0
+    x00, y00 = -0.5, -0.5
+    x01, y01 = 0.0, -0.5
+    x02, y02 = 0.5, -0.5
+    x10, y10 = -0.5, 0.0
+    x11, y11 = 0.0, 0.0
+    x12, y12 = 0.5, 0.0
+    x20, y20 = -0.5, 0.5
+    x21, y21 = 0.0, 0.5
+    x22, y22 = 0.5, 0.5
 
-    x13, y13 = -0.5, 0
-    x34, y34 = 0, 0.5
+    i = Node(label='i', x=x11, y=y11, level=level)
+    E00 = Node(label='E', x=x00, y=y00, level=level)
+    E02 = Node(label='E', x=x02, y=y02, level=level)
+    E20 = Node(label='E', x=x20, y=y20, level=level)
+    E22 = Node(label='E', x=x22, y=y22, level=level)
 
-    i = Node(label='i', x=x0, y=y0, level=level)
-    E1 = Node(label='E', x=x1, y=y1, level=level)
-    E2 = Node(label='E', x=x2, y=y2, level=level)
-    E3 = Node(label='E', x=x3, y=y3, level=level)
-    E4 = Node(label='E', x=x4, y=y4, level=level)
+    E10 = Node(label='E', x=x10, y=y10, level=level)
+    E21 = Node(label='E', x=x21, y=y21, level=level)
 
-    E13 = Node(label='E', x=x13, y=y13, level=level)
-    E34 = Node(label='E', x=x34, y=y34, level=level)
-
-    G.add_nodes([i, E1, E2, E3, E4, E13, E34])
+    G.add_nodes([i, E00, E02, E20, E22, E10, E21])
 
     G.add_edges([
-        (i, E1), (i, E2), (i, E3), (i, E4),
-        (E13, E1), (E13, E3),
-        (E34, E3), (E34, E4),
-        (E2, E4),
-        (E1, E2),
+        (i, E00), (i, E02), (i, E20), (i, E22),
+        (E00, E02),
+        (E00, E10), (E10, E20),
+        (E02, E22),
+        (E20, E21), (E21, E22),
     ])
 
-    I1 = Node(label='I', x=(x1 + x9) / 2, y=(y1 + y9) / 2, level=level + 1)
-    I2 = Node(label='I', x=(x2 + x9) / 2, y=(y2 + y9) / 2, level=level + 1)
-    I3 = Node(label='I', x=(x3 + x9) / 2, y=(y3 + y9) / 2, level=level + 1)
-    I4 = Node(label='I', x=(x4 + x9) / 2, y=(y4 + y9) / 2, level=level + 1)
+    I00 = Node(label='I', x=(x00 + x11) / 2, y=(y00 + y11) / 2, level=level + 1)
+    I01 = Node(label='I', x=(x02 + x11) / 2, y=(y02 + y11) / 2, level=level + 1)
+    I10 = Node(label='I', x=(x20 + x11) / 2, y=(y20 + y11) / 2, level=level + 1)
+    I11 = Node(label='I', x=(x22 + x11) / 2, y=(y22 + y11) / 2, level=level + 1)
 
-    E1 = Node(label='E', x=x1, y=y1, level=level + 1)
-    E2 = Node(label='E', x=x2, y=y2, level=level + 1)
-    E3 = Node(label='E', x=x3, y=y3, level=level + 1)
-    E4 = Node(label='E', x=x4, y=y4, level=level + 1)
-    E5 = Node(label='E', x=x5, y=y5, level=level + 1)
-    E6 = Node(label='E', x=x6, y=y6, level=level + 1)
-    E7 = Node(label='E', x=x7, y=y7, level=level + 1)
-    E8 = Node(label='E', x=x8, y=y8, level=level + 1)
-    E9 = Node(label='E', x=x9, y=y9, level=level + 1)
+    E00 = Node(label='E', x=x00, y=y00, level=level + 1)
+    E01 = Node(label='E', x=x01, y=y01, level=level + 1)
+    E02 = Node(label='E', x=x02, y=y02, level=level + 1)
+    E10 = Node(label='E', x=x10, y=y10, level=level + 1)
+    E11 = Node(label='E', x=x11, y=y11, level=level + 1)
+    E12 = Node(label='E', x=x12, y=y12, level=level + 1)
+    E20 = Node(label='E', x=x20, y=y20, level=level + 1)
+    E21 = Node(label='E', x=x21, y=y21, level=level + 1)
+    E22 = Node(label='E', x=x22, y=y22, level=level + 1)
 
     G.add_nodes([
-        I1, I2, I3, I4,
-        E1, E2, E3, E4, E5, E6, E7, E8, E9,
+        I00, I01, I10, I11,
+        E00, E01, E02,
+        E10, E11, E12,
+        E20, E21, E22,
     ])
 
     G.add_edges([
-        (i, I1), (i, I2), (i, I3), (i, I4),
-        (I1, E1), (I1, E5), (I1, E9), (I1, E6),
-        (I2, E5), (I2, E2), (I2, E7), (I2, E9),
-        (I3, E6), (I3, E9), (I3, E8), (I3, E3),
-        (I4, E9), (I4, E7), (I4, E4), (I4, E8),
-        (E1, E5), (E5, E2),
-        (E1, E6), (E5, E9), (E2, E7),
-        (E6, E9), (E9, E7),
-        (E6, E3), (E9, E8), (E7, E4),
-        (E3, E8), (E8, E4),
+        (i, I00), (i, I01), (i, I10), (i, I11),
+        (I00, E00), (I00, E01), (I00, E10), (I00, E11),
+        (I01, E01), (I01, E02), (I01, E11), (I01, E12),
+        (I10, E10), (I10, E11), (I10, E20), (I10, E21),
+        (I11, E11), (I11, E12), (I11, E21), (I11, E22),
+
+        (E00, E01), (E01, E02),
+        (E10, E11), (E11, E12),
+        (E20, E21), (E21, E22),
+
+        (E00, E10), (E10, E20),
+        (E01, E11), (E11, E21),
+        (E02, E12), (E12, E22),
     ])
 
     return G

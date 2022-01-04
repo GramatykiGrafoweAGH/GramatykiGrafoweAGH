@@ -12,63 +12,68 @@ def P3(G: Graph) -> None:
     level = I.level
 
     try:
-        E1, E2, E3, E4 = get_square_vertices(G, I)
+        E00, E02, E20, E22 = get_square_vertices(G, I)
     except SquareNotFoundError:
         raise CannotApplyProductionError()
 
     try:
-        E13 = next(G.get_common_neighbors_with_label(E1, E3, 'E'))
+        E10 = next(G.get_common_neighbors_with_label(E00, E20, 'E'))
     except StopIteration:
         raise CannotApplyProductionError()
 
     next_level = level + 1
 
-    x1, y1 = E1.x, E1.y
-    x2, y2 = E2.x, E2.y
-    x3, y3 = E3.x, E3.y
-    x4, y4 = E4.x, E4.y
-    x13, y13 = E13.x, E13.y
+    x00, y00 = E00.x, E00.y
+    x02, y02 = E02.x, E02.y
+    x20, y20 = E20.x, E20.y
+    x22, y22 = E22.x, E22.y
+    x10, y10 = E10.x, E10.y
 
-    x12, y12 = (x1 + x2) / 2, (y1 + y2) / 2
-    x34, y34 = (x3 + x4) / 2, (y3 + y4) / 2
-    x14, y14 = (x1 + x4) / 2, (y1 + y4) / 2
-    x24, y24 = (x2 + x4) / 2, (y2 + y4) / 2
+    x01, y01 = (x00 + x02) / 2, (y00 + y02) / 2
+    x11, y11 = (x00 + x22) / 2, (y00 + y22) / 2
+    x12, y12 = (x02 + x22) / 2, (y02 + y22) / 2
+    x21, y21 = (x20 + x22) / 2, (y20 + y22) / 2
 
     i = Node(label='i', x=I.x, y=I.y, level=level)
 
-    I1 = Node(label='I', x=(x1 + x14) / 2, y=(y1 + y14) / 2, level=next_level)
-    I2 = Node(label='I', x=(x2 + x14) / 2, y=(y2 + y14) / 2, level=next_level)
-    I3 = Node(label='I', x=(x3 + x14) / 2, y=(y3 + y14) / 2, level=next_level)
-    I4 = Node(label='I', x=(x4 + x14) / 2, y=(y4 + y14) / 2, level=next_level)
+    I00 = Node(label='I', x=(x00 + x11) / 2, y=(y00 + y11) / 2, level=next_level)
+    I01 = Node(label='I', x=(x02 + x11) / 2, y=(y02 + y11) / 2, level=next_level)
+    I10 = Node(label='I', x=(x20 + x11) / 2, y=(y20 + y11) / 2, level=next_level)
+    I11 = Node(label='I', x=(x22 + x11) / 2, y=(y22 + y11) / 2, level=next_level)
 
-    E1 = Node(label='E', x=x1, y=y1, level=next_level)
-    E2 = Node(label='E', x=x2, y=y2, level=next_level)
-    E3 = Node(label='E', x=x3, y=y3, level=next_level)
-    E4 = Node(label='E', x=x4, y=y4, level=next_level)
+    E00 = Node(label='E', x=x00, y=y00, level=next_level)
+    E01 = Node(label='E', x=x01, y=y01, level=next_level)
+    E02 = Node(label='E', x=x02, y=y02, level=next_level)
+    E10 = Node(label='E', x=x10, y=y10, level=next_level)
+    E11 = Node(label='E', x=x11, y=y11, level=next_level)
     E12 = Node(label='E', x=x12, y=y12, level=next_level)
-    E13 = Node(label='E', x=x13, y=y13, level=next_level)
-    E24 = Node(label='E', x=x24, y=y24, level=next_level)
-    E34 = Node(label='E', x=x34, y=y34, level=next_level)
-    E14 = Node(label='E', x=x14, y=y14, level=next_level)
+    E20 = Node(label='E', x=x20, y=y20, level=next_level)
+    E21 = Node(label='E', x=x21, y=y21, level=next_level)
+    E22 = Node(label='E', x=x22, y=y22, level=next_level)
 
     G.replace_node(I, i)
 
     G.add_nodes([
-        I1, I2, I3, I4,
-        E1, E2, E3, E4, E12, E13, E24, E34, E14,
+        I00, I01, I10, I11,
+        E00, E01, E02,
+        E10, E11, E12,
+        E20, E21, E22
     ])
 
     G.add_edges([
-        (i, I1), (i, I2), (i, I3), (i, I4),
-        (I1, E1), (I1, E12), (I1, E13), (I1, E14),
-        (I2, E2), (I2, E12), (I2, E24), (I2, E14),
-        (I3, E3), (I3, E13), (I3, E34), (I3, E14),
-        (I4, E4), (I4, E24), (I4, E34), (I4, E14),
-        (E12, E1), (E12, E2),
-        (E13, E1), (E13, E3),
-        (E24, E2), (E24, E4),
-        (E34, E3), (E34, E4),
-        (E14, E12), (E14, E13), (E14, E24), (E14, E34),
+        (i, I00), (i, I01), (i, I10), (i, I11),
+        (I00, E00), (I00, E01), (I00, E10), (I00, E11),
+        (I01, E02), (I01, E01), (I01, E12), (I01, E11),
+        (I10, E20), (I10, E10), (I10, E21), (I10, E11),
+        (I11, E22), (I11, E12), (I11, E21), (I11, E11),
+
+        (E00, E01), (E01, E02),
+        (E10, E11), (E11, E12),
+        (E20, E21), (E21, E22),
+
+        (E00, E10), (E10, E20),
+        (E01, E11), (E11, E21),
+        (E02, E12), (E12, E22),
     ])
 
 
@@ -81,62 +86,67 @@ def P4(G: Graph) -> None:
     level = I.level
 
     try:
-        E1, E2, E3, E4 = get_square_vertices(G, I)
+        E00, E02, E20, E22 = get_square_vertices(G, I)
     except SquareNotFoundError:
         raise CannotApplyProductionError()
 
     try:
-        E12 = next(G.get_common_neighbors_with_label(E1, E2, 'E'))
-        E13 = next(G.get_common_neighbors_with_label(E1, E3, 'E'))
+        E01 = next(G.get_common_neighbors_with_label(E00, E02, 'E'))
+        E10 = next(G.get_common_neighbors_with_label(E00, E20, 'E'))
     except StopIteration:
         raise CannotApplyProductionError()
 
     next_level = level + 1
 
-    x1, y1 = E1.x, E1.y
-    x2, y2 = E2.x, E2.y
-    x3, y3 = E3.x, E3.y
-    x4, y4 = E4.x, E4.y
-    x12, y12 = E12.x, E12.y
-    x13, y13 = E13.x, E13.y
+    x00, y00 = E00.x, E00.y
+    x02, y02 = E02.x, E02.y
+    x20, y20 = E20.x, E20.y
+    x22, y22 = E22.x, E22.y
+    x01, y01 = E01.x, E01.y
+    x10, y10 = E10.x, E10.y
 
-    x34, y34 = (x3 + x4) / 2, (y3 + y4) / 2
-    x14, y14 = (x1 + x4) / 2, (y1 + y4) / 2
-    x24, y24 = (x2 + x4) / 2, (y2 + y4) / 2
+    x11, y11 = (x00 + x22) / 2, (y00 + y22) / 2
+    x12, y12 = (x02 + x22) / 2, (y02 + y22) / 2
+    x21, y21 = (x20 + x22) / 2, (y20 + y22) / 2
 
     i = Node(label='i', x=I.x, y=I.y, level=level)
 
-    I1 = Node(label='I', x=(x1 + x14) / 2, y=(y1 + y14) / 2, level=next_level)
-    I2 = Node(label='I', x=(x2 + x14) / 2, y=(y2 + y14) / 2, level=next_level)
-    I3 = Node(label='I', x=(x3 + x14) / 2, y=(y3 + y14) / 2, level=next_level)
-    I4 = Node(label='I', x=(x4 + x14) / 2, y=(y4 + y14) / 2, level=next_level)
+    I00 = Node(label='I', x=(x00 + x11) / 2, y=(y00 + y11) / 2, level=next_level)
+    I01 = Node(label='I', x=(x02 + x11) / 2, y=(y02 + y11) / 2, level=next_level)
+    I10 = Node(label='I', x=(x20 + x11) / 2, y=(y20 + y11) / 2, level=next_level)
+    I11 = Node(label='I', x=(x22 + x11) / 2, y=(y22 + y11) / 2, level=next_level)
 
-    E1 = Node(label='E', x=x1, y=y1, level=next_level)
-    E2 = Node(label='E', x=x2, y=y2, level=next_level)
-    E3 = Node(label='E', x=x3, y=y3, level=next_level)
-    E4 = Node(label='E', x=x4, y=y4, level=next_level)
+    E00 = Node(label='E', x=x00, y=y00, level=next_level)
+    E01 = Node(label='E', x=x01, y=y01, level=next_level)
+    E02 = Node(label='E', x=x02, y=y02, level=next_level)
+    E10 = Node(label='E', x=x10, y=y10, level=next_level)
+    E11 = Node(label='E', x=x11, y=y11, level=next_level)
     E12 = Node(label='E', x=x12, y=y12, level=next_level)
-    E13 = Node(label='E', x=x13, y=y13, level=next_level)
-    E24 = Node(label='E', x=x24, y=y24, level=next_level)
-    E34 = Node(label='E', x=x34, y=y34, level=next_level)
-    E14 = Node(label='E', x=x14, y=y14, level=next_level)
+    E20 = Node(label='E', x=x20, y=y20, level=next_level)
+    E21 = Node(label='E', x=x21, y=y21, level=next_level)
+    E22 = Node(label='E', x=x22, y=y22, level=next_level)
 
     G.replace_node(I, i)
 
     G.add_nodes([
-        I1, I2, I3, I4,
-        E1, E2, E3, E4, E12, E13, E24, E34, E14,
+        I00, I01, I10, I11,
+        E00, E01, E02,
+        E10, E11, E12,
+        E20, E21, E22
     ])
 
     G.add_edges([
-        (i, I1), (i, I2), (i, I3), (i, I4),
-        (I1, E1), (I1, E12), (I1, E13), (I1, E14),
-        (I2, E2), (I2, E12), (I2, E24), (I2, E14),
-        (I3, E3), (I3, E13), (I3, E34), (I3, E14),
-        (I4, E4), (I4, E24), (I4, E34), (I4, E14),
-        (E12, E1), (E12, E2),
-        (E13, E1), (E13, E3),
-        (E24, E2), (E24, E4),
-        (E34, E3), (E34, E4),
-        (E14, E12), (E14, E13), (E14, E24), (E14, E34),
+        (i, I00), (i, I01), (i, I10), (i, I11),
+        (I00, E00), (I00, E01), (I00, E10), (I00, E11),
+        (I01, E02), (I01, E01), (I01, E12), (I01, E11),
+        (I10, E20), (I10, E10), (I10, E21), (I10, E11),
+        (I11, E22), (I11, E12), (I11, E21), (I11, E11),
+
+        (E00, E01), (E01, E02),
+        (E10, E11), (E11, E12),
+        (E20, E21), (E21, E22),
+
+        (E00, E10), (E10, E20),
+        (E01, E11), (E11, E21),
+        (E02, E12), (E12, E22),
     ])
