@@ -74,11 +74,11 @@ def test_P9_isomorphic_left_side():
 
     P9(G)
 
-    assert len(G.nodes) == 10
+    assert G.number_of_nodes == 10
 
     assert G.number_of_edges == 16
 
-    Es = list(filter(lambda n: n.level == 3 and n.label == 'E', G.nodes))
+    Es = G.get_nodes_with_predicate(lambda n: n.level == 3 and n.label == 'E')
 
     assert len(Es) == 3
 
@@ -106,7 +106,7 @@ def test_P9_left_side_deleted_edge():
     G = make_P9_left_side_graph()
 
     I = G.get_first_node_with_label('I')
-    G.remove_edge(I, list(G.get_neighbors(I))[0])
+    G.remove_edge(I, next(G.get_neighbors(I)))
 
     assert_production_cannot_be_applied(P9, G)
 
@@ -144,11 +144,12 @@ def test_P9_left_side_invariance():
     G = make_P9_left_side_graph()
     expected = make_P9_left_side_graph()
 
-    I = G.get_first_node_with_label('I')
-    G.remove_node(I)
+    def modify_graph(graph):
+        I = graph.get_first_node_with_label('I')
+        graph.remove_node(I)
 
-    I = expected.get_first_node_with_label('I')
-    expected.remove_node(I)
+    modify_graph(G)
+    modify_graph(expected)
 
     assert_production_cannot_be_applied(P9, G)
     assert G.is_isomorphic_with(expected)

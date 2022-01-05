@@ -16,13 +16,13 @@ def P7(G: Graph) -> None:
                 if is_node_between(E1L, E2L, E3L):
                     E1L_, E2L_, E3L_ = E1L, E2L, E3L
 
-            if E1L_:
+            if E1L_ is not None:
                 for E1R in G.get_duplicates_of(E1L_):
                     for E3R in G.get_duplicates_of(E3L_):
                         if is_node_between(E1R, E2R, E3R):
                             E1R_, E2R_, E3R_ = E1R, E2R, E3R
 
-            if E1L_ and E1R_:
+            if E1L_ is not None and E1R_ is not None:
                 for I12L in G.get_common_neighbors_with_label(E1L_, E2L_, 'I'):
                     for I23L in G.get_common_neighbors_with_label(E2L_, E3L_, 'I'):
                         for iL in G.get_common_neighbors_with_label(I12L, I23L, 'i'):

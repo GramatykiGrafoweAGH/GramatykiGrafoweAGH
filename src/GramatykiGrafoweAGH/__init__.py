@@ -176,3 +176,6 @@ class Graph:
     def show(self):
         from GramatykiGrafoweAGH.visualization import show_graph
         show_graph(self)
+
+    def get_nodes_with_predicate(self, predicate: Callable[[Node], bool]) -> List[Node]:
+        return list(filter(predicate, self.nodes))
