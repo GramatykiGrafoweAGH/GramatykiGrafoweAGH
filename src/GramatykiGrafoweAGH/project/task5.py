@@ -1,13 +1,19 @@
-from itertools import combinations
+from typing import Iterable, List, Optional
 
-from GramatykiGrafoweAGH import Graph
-from GramatykiGrafoweAGH.exceptions import CannotApplyProductionError
+from GramatykiGrafoweAGH import Graph, IProduction, Node
 from GramatykiGrafoweAGH.project.utils import is_node_between
 
 
-def P8(G: Graph) -> None:
-    for E2s in G.get_duplicates_with_label('E'):
-        for E2L, E2R in combinations(E2s, 2):
+class Production8(IProduction):
+    def get_possible_roots(self, G: Graph) -> Iterable[Node]:
+        for group in G.get_duplicates_with_label('E'):
+            yield from group
+
+    def check_root(self, G: Graph, root: Node) -> bool:
+        return root.label == 'E'
+
+    def match_lhs(self, G: Graph, E2L: Node) -> Optional[List[Node]]:
+        for E2R in G.get_duplicates_of(E2L):
             for E1 in G.get_common_neighbors_with_label(E2L, E2R, 'E'):
                 for E3L in G.get_neighbors_with_label(E2L, 'E'):
                     if E3L is not E1 and is_node_between(E1, E2L, E3L):
@@ -20,8 +26,13 @@ def P8(G: Graph) -> None:
                                                 for I23R in G.get_common_neighbors_with_label(E2R, E3R, 'I'):
                                                     for iR in G.get_common_neighbors_with_label(I12R, I23R, 'i'):
                                                         for E in G.get_common_neighbors_with_label(iL, iR, 'E'):
-                                                            G.merge_two_nodes(E2L, E2R)
-                                                            G.merge_two_nodes(E3L, E3R)
-                                                            return
+                                                            return [E2L, E3L, E2R, E3R]
 
-    raise CannotApplyProductionError()
+    def apply_for_lhs(self, G: Graph, lhs: List[Node]) -> List[Node]:
+        E2L, E3L, E2R, E3R = lhs
+        E2 = G.merge_two_nodes(E2L, E2R)
+        E3 = G.merge_two_nodes(E3L, E3R)
+        return [E2, E3]
+
+
+P8 = Production8()
