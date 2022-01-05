@@ -8,7 +8,7 @@ from GramatykiGrafoweAGH.project.utils import is_node_between
 class Production7(IProduction):
     def get_possible_roots(self, G: Graph) -> Iterable[Node]:
         for group in G.get_duplicates_with_label('E'):
-            yield group[0]
+            yield from group
 
     def check_root(self, G: Graph, root: Node) -> bool:
         return root.label == 'E'
