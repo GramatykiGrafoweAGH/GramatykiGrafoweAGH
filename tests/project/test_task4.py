@@ -39,36 +39,14 @@ def make_P7_left_side_graph():
 
 
 def make_P7_left_side_graph_not_middle():
-    G = Graph()
+    G = make_P7_left_side_graph()
 
-    level = 2
+    E1, E2 = G.get_nodes_with_predicate(lambda n: n.label == 'E' and n.level == 3 and n.y == -4)
+    E1a = Node(label=E1.label, x=E1.x, y=E1.y + 0.2, level=E1.level)
+    E2a = Node(label=E2.label, x=E2.x, y=E2.y + 0.2, level=E2.level)
 
-    E = Node(label='E', x=0, y=0, level=level)
-    iL = Node(label='i', x=-1, y=-1, level=level)
-    iR = Node(label='i', x=1, y=-1, level=level)
-
-    I1L = Node(label='I', x=-2, y=-2, level=level + 1)
-    I2L = Node(label='I', x=-1, y=-2, level=level + 1)
-
-    I1R = Node(label='I', x=1, y=-2, level=level + 1)
-    I2R = Node(label='I', x=2, y=-2, level=level + 1)
-
-    E1L = Node(label='E', x=0, y=-3, level=level + 1)
-    E2L = Node(label='E', x=0, y=-4.2, level=level + 1)
-    E3L = Node(label='E', x=0, y=-5, level=level + 1)
-
-    E1R = Node(label='E', x=0, y=-3, level=level + 1)
-    E2R = Node(label='E', x=0, y=-4.2, level=level + 1)
-    E3R = Node(label='E', x=0, y=-5, level=level + 1)
-
-    G.add_nodes([E, iL, iR, I1L, I2L, I1R, I2R, E1L, E2L, E3L, E1R, E2R, E3R])
-
-    G.add_edges([
-        (E, iL), (E, iR), (iL, I1L), (iL, I2L), (iR, I1R), (iR, I2R),
-        (I1L, E1L), (I1L, E2L), (I2L, E2L), (I2L, E3L),
-        (I1R, E1R), (I1R, E2R), (I2R, E2R), (I2R, E3R),
-        (E1L, E2L), (E2L, E3L), (E1R, E2R), (E2R, E3R)
-    ])
+    G.replace_node(E1, E1a)
+    G.replace_node(E2, E2a)
 
     return G
 
