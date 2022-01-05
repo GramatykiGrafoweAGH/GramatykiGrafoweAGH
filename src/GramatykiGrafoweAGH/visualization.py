@@ -28,6 +28,10 @@ node_colors = {
 }
 
 
+def get_node_position(node: Node) -> Tuple[int, int]:
+    return node.x, node.y + node.level * 1.5
+
+
 def get_node_color(node: Node) -> str:
     return node_colors.get(min(node.level, 3), {}).get(node.label, 'violet')
 
@@ -45,15 +49,27 @@ def get_node_labels(G: nx.Graph) -> Dict[int, str]:
 
 def calculate_layout(G: nx.Graph) -> Dict[int, Tuple[float, float]]:
     return {
-        node: (node.x, node.y - node.level * 1.5)
+        node: get_node_position(node)
         for node in G.nodes
     }
 
 
-def draw_graph(G: Graph, *, level: Optional[int] = None) -> plt.Figure:
+def draw_graph(G: Graph, *, level: Optional[int] = None, mark_duplicates: Optional[bool] = False) -> plt.Figure:
     fig, ax = plt.subplots()
     ax.set_aspect('equal', adjustable='datalim')
     ax.set(xlabel='$x$', ylabel='$y$')
+    ax.invert_yaxis()
+
+    if mark_duplicates:
+        def gen():
+            for group in G._node_positions._dict.values():
+                if len(group) >= 2:
+                    node = group[0]
+                    if level is None or node.level == level:
+                        yield get_node_position(node)
+
+        xs, ys = zip(*gen())
+        ax.scatter(xs, ys, c='red', s=500)
 
     G = G._G
     if level is not None:
