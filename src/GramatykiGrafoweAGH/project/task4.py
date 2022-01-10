@@ -1,3 +1,4 @@
+from enum import Enum
 from itertools import combinations
 
 from GramatykiGrafoweAGH import Graph
@@ -5,8 +6,23 @@ from GramatykiGrafoweAGH.exceptions import CannotApplyProductionError
 from GramatykiGrafoweAGH.project.utils import is_node_between
 
 
+class Order(Enum):
+    TopDownLeftRight = lambda x: (x[0].y, x[0].x)
+    BottomUpLeftRight = lambda x: (-x[0].y, x[0].x)
+    TopDownRightLeft = lambda x: (x[0].y, -x[0].x)
+    BottomUpRightLeft = lambda x: (-x[0].y, -x[0].x)
+    LeftRightTopDown = lambda x: (x[0].x, x[0].y)
+    LeftRightBottomUp = lambda x: (x[0].x, -x[0].y)
+    RightLeftTopDown = lambda x: (-x[0].x, x[0].y)
+    RightLeftBottomUp = lambda x: (-x[0].x, -x[0].y)
+
+
+def order_by(comb, order=Order.TopDownLeftRight):
+    return sorted(comb, key=order)
+
+
 def P7(G: Graph) -> None:
-    for E2s in G.get_duplicates_with_label('E'):
+    for E2s in order_by(list(G.get_duplicates_with_label('E')), Order.BottomUpLeftRight):
         for E2L, E2R in combinations(E2s, 2):
             E1L_, E2L_, E3L_ = None, None, None
             E1R_, E2R_, E3R_ = None, None, None
