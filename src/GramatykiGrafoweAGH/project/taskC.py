@@ -79,6 +79,7 @@ def P12(G: Graph) -> None:
                                     for I13R in G.get_common_neighbors_with_label(E1, E3R, 'I'):
                                         for iR in G.get_neighbors_with_label(I13R, 'i'):
                                             for E in G.get_common_neighbors_with_label(iL, iR, 'E'):
+                                                G.remove_edge(E1, E3R)
                                                 G.merge_two_nodes(E3L, E3R)
                                                 return
 
