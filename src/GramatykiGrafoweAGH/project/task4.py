@@ -7,14 +7,29 @@ from GramatykiGrafoweAGH.project.utils import is_node_between
 
 
 class Order(Enum):
-    TopDownLeftRight = lambda x: (x[0].y, x[0].x)
-    BottomUpLeftRight = lambda x: (-x[0].y, x[0].x)
-    TopDownRightLeft = lambda x: (x[0].y, -x[0].x)
-    BottomUpRightLeft = lambda x: (-x[0].y, -x[0].x)
-    LeftRightTopDown = lambda x: (x[0].x, x[0].y)
-    LeftRightBottomUp = lambda x: (x[0].x, -x[0].y)
-    RightLeftTopDown = lambda x: (-x[0].x, x[0].y)
-    RightLeftBottomUp = lambda x: (-x[0].x, -x[0].y)
+    def TopDownLeftRight(x):
+        return x[0].y, x[0].x
+
+    def BottomUpLeftRight(x):
+        return -x[0].y, x[0].x
+
+    def TopDownRightLeft(x):
+        return x[0].y, -x[0].x
+
+    def BottomUpRightLeft(x):
+        return -x[0].y, -x[0].x
+
+    def LeftRightTopDown(x):
+        return x[0].x, x[0].y
+
+    def LeftRightBottomUp(x):
+        return x[0].x, -x[0].y
+
+    def RightLeftTopDown(x):
+        return -x[0].x, x[0].y
+
+    def RightLeftBottomUp(x):
+        return -x[0].x, -x[0].y
 
 
 def order_by(comb, order=Order.TopDownLeftRight):
