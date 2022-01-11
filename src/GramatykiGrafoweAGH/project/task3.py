@@ -4,7 +4,7 @@ from GramatykiGrafoweAGH import Node, Graph
 from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProductionError, SquareNotFoundError
 
 
-def make_initial_graph_P5() -> Graph:
+def make_initial_graph_P5(graph_type) -> Graph:
     G = Graph()
 
     I = Node(label='I', x=0, y=0, level=1)
@@ -12,19 +12,48 @@ def make_initial_graph_P5() -> Graph:
     E2 = Node(label='E', x=.5, y=.5, level=1)
     E3 = Node(label='E', x=-.5, y=-.5, level=1)
     E4 = Node(label='E', x=.5, y=-.5, level=1)
-    E12 = Node(label='E', x=0, y=.5, level=1)
-    E13 = Node(label='E', x=-.5, y=0, level=1)
-    E24 = Node(label='E', x=.5, y=0, level=1)
 
-    G.add_nodes([I, E1, E2, E3, E4, E12, E13, E24])
+    E_a = Node(label='E', x=0, y=.5, level=1)
+    E_b = Node(label='E', x=.5, y=0, level=1)
+    E_c = Node(label='E', x=0, y=-.5, level=1)
+    E_d = Node(label='E', x=-.5, y=0, level=1)
 
-    G.add_edges([
-        (I, E1), (I, E2), (I, E3), (I, E4),
-        (E1, E12), (E1, E13),
-        (E2, E12), (E2, E24),
-        (E3, E13), (E3, E4),
-        (E4, E24),
-    ])
+    edges = [(I, E1), (I, E2), (I, E3), (I, E4)]
+
+    if graph_type == 0:
+        G.add_nodes([I, E1, E2, E3, E4, E_a, E_b, E_c])
+        edges += [
+            (E1, E_a), (E_a, E2),
+            (E2, E_b), (E_b, E4),
+            (E4, E_c), (E_c, E3),
+            (E3, E1),
+        ]
+    if graph_type == 1:
+        G.add_nodes([I, E1, E2, E3, E4, E_a, E_b, E_d])
+        edges += [
+            (E1, E_a), (E_a, E2),
+            (E2, E_b), (E_b, E4),
+            (E4, E3),
+            (E3, E_d), (E_d, E1),
+        ]
+    if graph_type == 2:
+        G.add_nodes([I, E1, E2, E3, E4, E_a, E_c, E_d])
+        edges += [
+            (E1, E_a), (E_a, E2),
+            (E2, E4),
+            (E4, E_c), (E_c, E3),
+            (E3, E_d), (E_d, E1),
+        ]
+    if graph_type == 3:
+        G.add_nodes([I, E1, E2, E3, E4, E_b, E_c, E_d])
+        edges += [
+            (E1, E2),
+            (E2, E_b), (E_b, E4),
+            (E4, E_c), (E_c, E3),
+            (E3, E_d), (E_d, E1),
+        ]
+
+    G.add_edges(edges)
 
     return G
 
