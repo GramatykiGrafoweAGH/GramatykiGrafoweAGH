@@ -1,3 +1,4 @@
 pytest
 networkx
 matplotlib
+iteration_utilities
