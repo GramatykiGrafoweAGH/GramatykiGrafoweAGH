@@ -230,6 +230,8 @@ def test_P3_isomorphic_after_changed_midpoint():
         positions[0][1][0] -= 0.25
         positions[1][0][1] -= 0.25
         positions[0][1][1] -= 0.25
+        positions[1][1][0] -= 0.25
+        positions[1][1][1] -= 0.25
 
     G = make_initial_graph_P3(positions_modifier)
     expected = make_right_side_graph_P3(positions_modifier)
