@@ -87,6 +87,14 @@ def test_P10_isomorphic_left_side():
 
     assert len(Es2) == 4
 
+    Is = G.get_nodes_with_predicate(lambda n: n.label == 'I')
+
+    assert len(Is) == 1
+
+    iss = G.get_nodes_with_predicate(lambda n: n.label == 'i')
+
+    assert len(iss) == 1
+
     G.is_isomorphic_with(make_P10_right_side_graph())
 
 
@@ -150,3 +158,12 @@ def test_P10_left_side_invariance():
 
     assert_production_cannot_be_applied(P10, G)
     assert G.is_isomorphic_with(expected)
+
+
+def test_P10_can_be_applied_many_times():
+    G = make_P10_left_side_graph()
+
+    G.apply_production(P10, times=100)
+
+    iss = G.get_nodes_with_predicate(lambda n: n.label == 'i')
+    assert len(iss) == 100
