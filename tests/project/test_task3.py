@@ -159,7 +159,7 @@ def make_right_side_graph_P6():
 
 def test_P5_isomorphic_left_side():
     # test application of P5 to the graph isomorphic to left side of P5
-    G = make_initial_graph_P5()
+    G = make_initial_graph_P5(1)
     expected = make_right_side_graph_P5()
 
     P5(G)
@@ -169,7 +169,7 @@ def test_P5_isomorphic_left_side():
 
 def test_P5_left_side_deleted_node():
     # test application of P5 to the graph isomorphic to left side of P5 with deleted one node
-    G = make_initial_graph_P5()
+    G = make_initial_graph_P5(1)
     E = G.get_first_node_with_label('E')
     G.remove_node(E)
 
@@ -178,7 +178,7 @@ def test_P5_left_side_deleted_node():
 
 def test_P5_left_side_deleted_edge():
     # test application of P5 to the graph isomorphic to left side of P5 with deleted one edge
-    G = make_initial_graph_P5()
+    G = make_initial_graph_P5(1)
     E = G.get_first_node_with_label('E')
     G.remove_edge(E, list(G.get_neighbors(E))[0])
 
@@ -187,7 +187,7 @@ def test_P5_left_side_deleted_edge():
 
 def test_P5_left_side_wrong_label():
     # test application of P5 to the graph isomorphic to left side of P5 with not appropiate label
-    G = make_initial_graph_P5()
+    G = make_initial_graph_P5(1)
     E = G.get_first_node_with_label('E')
     G.replace_node(E, Node(label='e', x=E.x, y=E.y, level=E.level))
 
@@ -196,7 +196,7 @@ def test_P5_left_side_wrong_label():
 
 def test_P5_left_side_subgraph():
     # test application of P5 to the graph with the subgraph isomorphic to left side of P5
-    G = make_initial_graph_P5()
+    G = make_initial_graph_P5(1)
     expected = make_right_side_graph_P5()
 
     def add_node(G: Graph) -> None:
@@ -217,8 +217,8 @@ def test_P5_left_side_subgraph():
 
 def test_P5_left_side_invariance():
     # test invariance of the left side graph when production cannot be applied
-    G = make_initial_graph_P5()
-    expected = make_initial_graph_P5()
+    G = make_initial_graph_P5(1)
+    expected = make_initial_graph_P5(1)
 
     def remove_node(G: Graph) -> None:
         E = G.get_first_node_with_label('E')
