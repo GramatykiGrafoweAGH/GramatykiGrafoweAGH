@@ -5,19 +5,23 @@ from GramatykiGrafoweAGH.exceptions import NodeNotFoundError, CannotApplyProduct
 from GramatykiGrafoweAGH.project.utils import get_square_vertices_extended
 
 
-def make_initial_graph_P5(graph_type) -> Graph:
+def make_initial_graph_P5(graph_type, position_modifier=None) -> Graph:
+    if position_modifier is None:
+        position_modifier = [
+            (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)
+        ]
     G = Graph()
 
-    I = Node(label='I', x=0, y=0, level=1)
-    E1 = Node(label='E', x=-.5, y=.5, level=1)
-    E2 = Node(label='E', x=.5, y=.5, level=1)
-    E3 = Node(label='E', x=-.5, y=-.5, level=1)
-    E4 = Node(label='E', x=.5, y=-.5, level=1)
+    I = Node(label='I', x=0 + position_modifier[0][0], y=0 + position_modifier[0][1], level=1)
+    E1 = Node(label='E', x=-0.5 + position_modifier[1][0], y=0.5 + position_modifier[1][1], level=1)
+    E2 = Node(label='E', x=0.5 + position_modifier[2][0], y=0.5 + position_modifier[2][1], level=1)
+    E3 = Node(label='E', x=-0.5 + position_modifier[3][0], y=-0.5 + position_modifier[3][1], level=1)
+    E4 = Node(label='E', x=0.5 + position_modifier[4][0], y=-0.5 + position_modifier[4][1], level=1)
 
-    E_a = Node(label='E', x=0, y=.5, level=1)
-    E_b = Node(label='E', x=.5, y=0, level=1)
-    E_c = Node(label='E', x=0, y=-.5, level=1)
-    E_d = Node(label='E', x=-.5, y=0, level=1)
+    E_a = Node(label='E', x=0 + position_modifier[5][0], y=0.5 + position_modifier[5][1], level=1)
+    E_b = Node(label='E', x=0.5 + position_modifier[6][0], y=0 + position_modifier[6][1], level=1)
+    E_c = Node(label='E', x=0 + position_modifier[7][0], y=-0.5 + position_modifier[7][1], level=1)
+    E_d = Node(label='E', x=-0.5 + position_modifier[8][0], y=0 + position_modifier[8][1], level=1)
 
     edges = [(I, E1), (I, E2), (I, E3), (I, E4)]
 
@@ -57,22 +61,6 @@ def make_initial_graph_P5(graph_type) -> Graph:
     G.add_edges(edges)
 
     return G
-
-
-def get_square_vertices_local(G: Graph, I: Node) -> Tuple[Node, Node, Node, Node]:
-    Es = G.get_neighbors_with_label(I, 'E')
-    if len(Es) != 4:
-        raise SquareNotFoundError()
-
-    E3 = min(Es, key=lambda node: (node.x, node.y))
-    Es.remove(E3)
-    E2 = max(Es, key=lambda node: (node.x, node.y))
-    Es.remove(E2)
-    E4 = max(Es, key=lambda node: node.x)
-    Es.remove(E4)
-    E1, = Es
-
-    return E1, E2, E3, E4
 
 
 def P5(G: Graph) -> None:
@@ -153,18 +141,33 @@ def P5(G: Graph) -> None:
     ])
 
 
-def make_initial_graph_P6() -> Graph:
+def make_initial_graph_P6(position_modifier=None) -> Graph:
+    if position_modifier is None:
+        position_modifier = [
+            (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (0, 0)
+        ]
     G = Graph()
 
-    I = Node(label='I', x=0, y=0, level=1)
-    E1 = Node(label='E', x=-.5, y=.5, level=1)
-    E2 = Node(label='E', x=.5, y=.5, level=1)
-    E3 = Node(label='E', x=-.5, y=-.5, level=1)
-    E4 = Node(label='E', x=.5, y=-.5, level=1)
-    E12 = Node(label='E', x=0, y=.5, level=1)
-    E13 = Node(label='E', x=-.5, y=0, level=1)
-    E24 = Node(label='E', x=.5, y=0, level=1)
-    E34 = Node(label='E', x=0, y=-.5, level=1)
+    # I = Node(label='I', x=0, y=0, level=1)
+    # E1 = Node(label='E', x=-0.5, y=0.5, level=1)
+    # E2 = Node(label='E', x=0.5, y=0.5, level=1)
+    # E3 = Node(label='E', x=-0.5, y=-0.5, level=1)
+    # E4 = Node(label='E', x=0.5, y=-0.5, level=1)
+    # E12 = Node(label='E', x=0, y=0.5, level=1)
+    # E13 = Node(label='E', x=-0.5, y=0, level=1)
+    # E24 = Node(label='E', x=0.5, y=0, level=1)
+    # E34 = Node(label='E', x=0, y=-0.5, level=1)
+
+    I = Node(label='I', x=0 + position_modifier[0][0], y=0 + position_modifier[0][1], level=1)
+    E1 = Node(label='E', x=-0.5 + position_modifier[1][0], y=0.5 + position_modifier[1][1], level=1)
+    E2 = Node(label='E', x=0.5 + position_modifier[2][0], y=0.5 + position_modifier[2][1], level=1)
+    E3 = Node(label='E', x=-0.5 + position_modifier[3][0], y=-0.5 + position_modifier[3][1], level=1)
+    E4 = Node(label='E', x=0.5 + position_modifier[4][0], y=-0.5 + position_modifier[4][1], level=1)
+
+    E12 = Node(label='E', x=0 + position_modifier[5][0], y=0.5 + position_modifier[5][1], level=1)
+    E24 = Node(label='E', x=0.5 + position_modifier[6][0], y=0 + position_modifier[6][1], level=1)
+    E34 = Node(label='E', x=0 + position_modifier[7][0], y=-0.5 + position_modifier[7][1], level=1)
+    E13 = Node(label='E', x=-0.5 + position_modifier[8][0], y=0 + position_modifier[8][1], level=1)
 
     G.add_nodes([I, E1, E2, E3, E4, E12, E13, E24, E34])
 

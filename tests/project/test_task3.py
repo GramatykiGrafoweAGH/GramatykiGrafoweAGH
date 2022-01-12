@@ -230,6 +230,14 @@ def test_P5_left_side_invariance():
     assert_production_cannot_be_applied(P5, G)
     assert G.is_isomorphic_with(expected)
 
+def test_P5_wrong_midpoint():
+    G = make_initial_graph_P5(0, [(0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (-1, 0), (0, 0), (0, 0), (0, 0)])
+    assert_production_cannot_be_applied(P5, G)
+
+
+def test_P6_wrong_midpoint():
+    G = make_initial_graph_P6([(0, 0), (0, 0), (0, 0), (0, 0), (0, 0), (-1, 0), (0, 0), (1, 0), (0, 0)])
+    assert_production_cannot_be_applied(P6, G)
 
 def test_P6_isomorphic_left_side():
     # test application of P6 to the graph isomorphic to left side of P6
