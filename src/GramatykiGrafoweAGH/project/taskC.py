@@ -1,4 +1,4 @@
-from itertools import permutations
+from itertools import permutations, combinations
 
 from GramatykiGrafoweAGH import CannotApplyProductionError, Graph, Node, NodeNotFoundError
 from GramatykiGrafoweAGH.exceptions import SquareNotFoundError
@@ -48,7 +48,8 @@ def P10(G: Graph) -> None:
 
 def P11(G: Graph) -> None:
     for E3s in G.get_duplicates_with_label('E'):
-        for E3L, E3R in permutations(E3s, 2):  # sides are not symmetric, so we can no longer use combinations
+        # sides are not symmetric, so we can no longer use combinations
+        for E3L, E3R in permutations(E3s, 2):
             for E1R in G.get_neighbors_with_label(E3R, 'E'):
                 for E1L in G.get_duplicates_of(E1R):
                     for E2L in G.get_common_neighbors_with_label(E1L, E3L, 'E'):
@@ -68,7 +69,8 @@ def P11(G: Graph) -> None:
 
 def P12(G: Graph) -> None:
     for E3s in G.get_duplicates_with_label('E'):
-        for E3L, E3R in permutations(E3s, 2):  # sides are not symmetric, so we can no longer use combinations
+        # sides are not symmetric, so we can no longer use combinations
+        for E3L, E3R in permutations(E3s, 2):
             for E1 in G.get_neighbors_with_label(E3R, 'E'):
                 for E2L in G.get_common_neighbors_with_label(E1, E3L, 'E'):
                     if is_node_between(E1, E2L, E3L):
@@ -80,5 +82,20 @@ def P12(G: Graph) -> None:
                                             for E in G.get_common_neighbors_with_label(iL, iR, 'E'):
                                                 G.merge_two_nodes(E3L, E3R)
                                                 return
+
+    raise CannotApplyProductionError()
+
+
+def P13(G: Graph) -> None:
+    for E2s in G.get_duplicates_with_label('E'):
+        # both sides are symetric, so the order can be arbitrary
+        for E2L, E2R in combinations(E2s, 2):
+            for I12L in G.get_neighbors_with_label(E2L, 'I'):
+                for iL in G.get_neighbors_with_label(I12L, 'i'):
+                    for I12R in G.get_neighbors_with_label(E2R, 'I'):
+                        for iR in G.get_neighbors_with_label(I12R, 'i'):
+                            for E in G.get_common_neighbors_with_label(iL, iR, 'E'):
+                                G.merge_two_nodes(E2L, E2R)
+                                return
 
     raise CannotApplyProductionError()
