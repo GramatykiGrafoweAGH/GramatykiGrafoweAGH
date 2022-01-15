@@ -115,7 +115,8 @@ class Graph:
 
     def merge_two_nodes(self, old1: Node, old2: Node) -> Node:
         assert old1.label == old2.label and old1.x == old2.x and old1.y == old2.y and old1.level == old2.level
-        neighbors = set(self.get_neighbors(old1)) | set(self.get_neighbors(old2)) - {old1, old2}
+        neighbors = set(self.get_neighbors(old1)) | set(
+            self.get_neighbors(old2)) - {old1, old2}
         self.remove_node(old1)
         self.remove_node(old2)
         new = Node(label=old1.label, x=old1.x, y=old1.y, level=old1.level)
@@ -130,7 +131,7 @@ class Graph:
         found = [node for node in self.nodes if node.label == label]
         if not found:
             raise NodeNotFoundError(f'Node with label "{label}" not found')
-        return min(found, key=lambda node: (node.level, node.id))
+        return min(found, key=lambda node: (node.level, node.x, node.y))
 
     def get_neighbors_with_label(self, node: Node, label: str) -> List[Node]:
         return [n for n in self.get_neighbors(node) if n.label == label]
@@ -173,7 +174,7 @@ class Graph:
     def is_isomorphic_with(self, other: Graph) -> bool:
         return nx.is_isomorphic(self._G, other._G, node_match=node_match)
 
-    def show(self):
+    def show(self, **kwargs):
         from GramatykiGrafoweAGH.visualization import show_graph
         show_graph(self)
 

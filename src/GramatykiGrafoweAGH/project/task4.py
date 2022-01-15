@@ -12,6 +12,7 @@ def P7(G: Graph) -> None:
             E1R_, E2R_, E3R_ = None, None, None
 
             E13Ls = G.get_neighbors_with_label(E2L, 'E')
+            # both sides are symetric, so the order can be arbitrary
             for E1L, E3L in combinations(E13Ls, 2):
                 if is_node_between(E1L, E2L, E3L):
                     E1L_, E2L_, E3L_ = E1L, E2L, E3L
